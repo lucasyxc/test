@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>眼轴长度变化图表</title>
+    <!-- 引入ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+</head>
+<body>
+    <div id="chart" style="width: 600px;height:400px;"></div>
+    <script>
+        // 假设获取数据的函数
+        function fetchData(patient_id) {
+            // 这里我们模拟一个异步请求来获取数据
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({
+                        examination_date: ['2021-01-01', '2021-02-01', '2021-03-01'],
+                        right_eye_axial_length: [24.0, 24.2, 24.5],
+                        left_eye_axial_length: [23.5, 23.7, 24.0],
+                    });
+                }, 1000);
+            });
+        }
+
+        // 解析URL参数
+        const urlParams = new URLSearchParams(window.location.search);
+        const patient_id = urlParams.get('patient_id');
+
+        // 使用ECharts绘制图表
+        function drawChart(data) {
+            const chart = echarts.init(document.getElementById('chart'));
+            const option = {
+                title: {
+                    text: '眼轴长度变化',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['右眼眼轴长度', '左眼眼轴长度'],
+                    bottom: 0
+                },
+                xAxis: {
+                    type: 'category',
+                    data: data.examination_date
+                },
+                yAxis: {
+                    type: 'value',
+                    name: '眼轴长度 (mm)',
+                },
+                series: [{
+                    name: '右眼眼轴长度',
+                    type: 'line',
+                    data: data.right_eye_axial_length
+                }, {
+                    name: '左眼眼轴长度',
+                    type: 'line',
+                    data: data.left_eye_axial_length
+                }]
+            };
+
+            chart.setOption(option);
+        }
+
+        // 获取数据然后绘制图表
+        fetchData(patient_id).then(drawChart);
+    </script>
+</body>
+</html>
