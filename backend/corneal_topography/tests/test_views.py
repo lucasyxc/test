@@ -6,6 +6,7 @@ from django.core.cache import cache
 from ..models.patient import PInfo
 from ..views import jt_Medmontcorneal
 import pytest
+import logging
 
 class CornealTopographyViewTests(TestCase):
     """Test corneal topography view functionality."""
@@ -128,11 +129,19 @@ class CornealTopographyViewTests(TestCase):
     def test_rate_limiting(self, mock_task):
         """Test rate limiting functionality."""
         import time
+        logger = logging.getLogger('corneal_topography.services.rate_limiter')
+        logger.setLevel(logging.DEBUG)
         mock_task.return_value = None
 
-        with self.settings(RATE_LIMIT={'default': {'LIMIT': 3, 'PERIOD': 60}}):
+        with self.settings(RATE_LIMIT={
+            'corneal_topography': {  # Use correct key matching the decorator
+                'LIMIT': 3,
+                'PERIOD': 60
+            }
+        }):
             # Make requests up to the limit
-            for _ in range(3):
+            for i in range(3):
+                logger.debug(f"Making request {i+1} of 3")
                 response = self.client.post(
                     reverse('corneal_topography'),
                     data={
@@ -147,6 +156,7 @@ class CornealTopographyViewTests(TestCase):
                 self.assertEqual(response.status_code, 200)
                 time.sleep(0.1)  # Small delay between requests
 
+            logger.debug("Making rate-limited request")
             # Next request should be rate limited
             response = self.client.post(
                 reverse('corneal_topography'),
