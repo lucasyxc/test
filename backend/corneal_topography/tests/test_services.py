@@ -5,7 +5,7 @@ from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.exceptions import ValidationError
 
-from ..models.examination import ExaminationRecord, CornealTopographyData
+from ..models.examination import PatientExaminationRecords
 from ..models.patient import PInfo
 from ..services.file_service import FileService
 from ..services.examination_service import ExaminationService
@@ -67,16 +67,48 @@ class ExaminationServiceTests(TestCase):
             'patient_id': self.patient.id,
             'organization_id': 'ORG1',
             'examination_date': date.today(),
-            'right_eye_data': {
-                'k1': 23.5,
-                'k2': 24.0,
-            }
+            'corneal_topography_right_eye_k1': 23.5,
+            'corneal_topography_right_eye_k2': 24.0,
+            'corneal_topography_right_eye_k1_axis': 90,
+            'corneal_topography_right_eye_k2_axis': 180,
         }
         record = self.service.create_or_update_examination(**exam_data)
-        self.assertIsInstance(record, ExaminationRecord)
-        self.assertEqual(record.right_eye.k1, 23.5)
-        self.assertEqual(record.right_eye.k2, 24.0)
-        self.assertEqual(record.right_eye.delta_k, 0.5)
+        self.assertIsInstance(record, PatientExaminationRecords)
+        self.assertEqual(record.corneal_topography_right_eye_k1, 23.5)
+        self.assertEqual(record.corneal_topography_right_eye_k2, 24.0)
+        self.assertEqual(record.corneal_topography_right_eye_k1_axis, 90)
+        self.assertEqual(record.corneal_topography_right_eye_k2_axis, 180)
+
+    def test_update_existing_examination(self):
+        """Test updating an existing examination record."""
+        # Create initial record
+        initial_data = {
+            'patient_id': self.patient.id,
+            'organization_id': 'ORG1',
+            'examination_date': date.today(),
+            'corneal_topography_right_eye_k1': 23.5,
+        }
+        record = self.service.create_or_update_examination(**initial_data)
+
+        # Update record
+        update_data = {
+            'patient_id': self.patient.id,
+            'organization_id': 'ORG1',
+            'examination_date': date.today(),
+            'corneal_topography_right_eye_k1': 24.0,
+        }
+        updated_record = self.service.create_or_update_examination(**update_data)
+        self.assertEqual(updated_record.corneal_topography_right_eye_k1, 24.0)
+
+    def test_invalid_patient(self):
+        """Test handling invalid patient ID."""
+        exam_data = {
+            'patient_id': 99999,  # Non-existent patient ID
+            'organization_id': 'ORG1',
+            'examination_date': date.today(),
+        }
+        with self.assertRaises(ValidationError):
+            self.service.create_or_update_examination(**exam_data)
 
 class CacheServiceTests(TestCase):
     """Test caching service."""

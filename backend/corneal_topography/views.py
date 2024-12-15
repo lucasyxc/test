@@ -1,22 +1,22 @@
 import logging
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.core.exceptions import ValidationError
-
+from django.core.files.storage import FileSystemStorage
+from django.urls import reverse
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from .models.patient import PInfo
+from .models.examination import PatientExaminationRecords, PatientReviewReminder
+from .services.cache_service import CacheService
 from .services.file_service import FileService
 from .services.examination_service import ExaminationService
-from .services.cache_service import CacheService
-from .models.examination import CornealTopographyData
 from .services.rate_limiter import rate_limit
-from .tasks import process_examination_data
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
 @csrf_exempt
-@rate_limit(key_prefix="corneal_topography")  # Use settings-based rate limiting
+@rate_limit(key_prefix="corneal_topography")
 def jt_medmontcorneal(request):
     """Handle corneal topography examination data."""
     if request.method != 'POST':
@@ -24,45 +24,46 @@ def jt_medmontcorneal(request):
         return JsonResponse({"error": "Invalid request method"}, status=405)
 
     try:
-        # Initialize services
+        logger.info("Processing corneal topography request")
         file_service = FileService()
-        examination_service = ExaminationService()
         cache_service = CacheService()
+        examination_service = ExaminationService()
 
-        # Extract and validate required fields
+        # Validate and process file
+        if 'file' not in request.FILES:
+            logger.error("No file provided in request")
+            return JsonResponse({"error": "No file provided"}, status=400)
+
+        fundus_photo = request.FILES['file']
+        file_result = file_service.process_file(fundus_photo)
+        if not file_result.get('success'):
+            return JsonResponse({"error": file_result.get('error')}, status=400)
+
+        # Get request parameters
         organization_id = request.POST.get('organization_id')
         patient_gkid = request.POST.get('gkid')
-        eye_type = request.POST.get('type')
-        eye_side = request.POST.get('eye')
+        exam_type = request.POST.get('type')
+        eye_r_l_d = request.POST.get('eye')
 
+        logger.info("Processing data for patient %s from organization %s", patient_gkid, organization_id)
+
+        # Validate required parameters
         if not patient_gkid:
-            logger.error("Missing patient GKID")
+            logger.error("Missing patient ID in request")
             return JsonResponse({"error": "Missing patient ID"}, status=400)
 
-        # Process file upload
-        try:
-            fundus_photo = request.FILES['file']
-            filename, file_url = file_service.save_file(fundus_photo)
-        except (KeyError, ValidationError) as e:
-            logger.error("File upload error: %s", str(e))
-            return JsonResponse({"error": str(e)}, status=400)
-
-        # Get patient information
+        # Try to get patient from cache first
         patient = cache_service.get_patient(patient_gkid, organization_id)
         if not patient:
             try:
-                patient = PInfo.objects.filter(
-                    gkid=patient_gkid,
-                    organizationid=organization_id
-                ).first()
+                patient = PInfo.objects.filter(gkid=patient_gkid, organizationid=organization_id).first()
                 if not patient:
                     logger.error("Patient not found: %s", patient_gkid)
                     return JsonResponse({"error": "Patient not found"}, status=404)
-                logger.info("Found patient: %s, ID: %s", patient.name, patient.id)
                 cache_service.set_patient(patient_gkid, organization_id, patient)
             except Exception as e:
-                logger.error("Patient lookup failed: %s", str(e))
-                return JsonResponse({"error": "Patient lookup failed"}, status=500)
+                logger.error("Error retrieving patient: %s", str(e))
+                return JsonResponse({"error": "Error retrieving patient"}, status=500)
 
         # Process examination data
         current_date = datetime.now().date()
@@ -70,50 +71,31 @@ def jt_medmontcorneal(request):
             'patient_id': patient.id,
             'organization_id': organization_id,
             'examination_date': current_date,
-            'photo_path': file_url,
-            'brand': 'Medmonte300',
-            'device': request.POST.get('device'),
+            'photo_path': file_result.get('file_url'),
+            'exam_type': exam_type,
+            'eye_position': eye_r_l_d
         }
 
-        # Extract measurements based on eye side
-        eye_data = {}
-        for field in CornealTopographyData.__dataclass_fields__:
-            if field != 'delta_k':  # delta_k is calculated automatically
-                value = request.POST.get(f'corneal_topography_{eye_side}_{field}')
-                if value:
-                    try:
-                        eye_data[field] = float(value)
-                    except ValueError:
-                        logger.warning("Invalid value for %s: %s", field, value)
+        try:
+            # Import task at module level to avoid circular imports
+            from .tasks import process_examination_data
 
-        # Add eye-specific data
-        if eye_side == 'right':
-            examination_data['right_eye_data'] = eye_data
-            examination_data['right_first'] = True
-        else:
-            examination_data['left_eye_data'] = eye_data
-            examination_data['left_first'] = True
+            # Always call the task, let Celery handle ALWAYS_EAGER
+            process_examination_data.delay(examination_data)
 
-        # Create or update examination record asynchronously
-        process_examination_data.delay(examination_data)
+            response_data = {
+                "time": current_date.strftime('%Y-%m-%d'),
+                "patient_name": patient.name,
+                "createStatus": "Success",
+                "checkStatus": "Medmonte300",
+                "patient_creation_time": patient.createDate.strftime('%Y-%m-%d') if patient.createDate else None
+            }
+            return JsonResponse({"success": True, "data": response_data}, status=200)
 
-        # Update patient information
-        patient.total_exam_count += 1
-        patient.latestexamdate = current_date
-        patient.save()
-
-        # Prepare response
-        response_data = {
-            "time": current_date.strftime('%Y-%m-%d'),
-            "patient_name": patient.name,
-            "createStatus": "当日新建",
-            "checkStatus": "Medmonte300",
-            "patient_creation_time": patient.createDate.strftime('%Y-%m-%d') if patient.createDate else None
-        }
-
-        logger.info("Successfully processed examination for patient %s", patient_gkid)
-        return JsonResponse({"success": True, "data": response_data}, status=200)
+        except Exception as e:
+            logger.error("Unexpected error: %s", str(e))
+            return JsonResponse({"error": "Internal server error"}, status=500)
 
     except Exception as e:
         logger.error("Unexpected error: %s", str(e))
-        return JsonResponse({"error": "Internal server error", "details": str(e)}, status=500)
+        return JsonResponse({"error": "Internal server error"}, status=500)

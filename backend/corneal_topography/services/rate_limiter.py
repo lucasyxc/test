@@ -1,6 +1,6 @@
 from functools import wraps
 from django.core.cache import cache
-from django.http import HttpResponse
+from django.http import JsonResponse
 from django.conf import settings
 import time
 
@@ -33,8 +33,8 @@ def rate_limit(key_prefix: str, limit: int = None, period: int = None):
             requests = [req for req in requests if req > now - actual_period]
 
             if len(requests) >= actual_limit:
-                return HttpResponse(
-                    "Rate limit exceeded. Please try again later.",
+                return JsonResponse(
+                    {"error": "Rate limit exceeded. Please try again later."},
                     status=429
                 )
 

@@ -17,8 +17,12 @@ class CacheService:
 
     def get_patient(self, gkid: str, organization_id: str) -> Optional[Any]:
         """Get patient data from cache."""
+        if not gkid or not organization_id:
+            return None
         cache_key = self.get_cache_key(f"patient:{organization_id}", gkid)
-        return cache.get(cache_key)
+        cached_data = cache.get(cache_key)
+        logger.debug(f"Cache lookup for key {cache_key}: {'hit' if cached_data else 'miss'}")
+        return cached_data
 
     def set_patient(self, gkid: str, organization_id: str, patient_data: Any,
                    timeout: int = DEFAULT_TIMEOUT) -> None:

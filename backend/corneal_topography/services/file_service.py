@@ -1,5 +1,5 @@
 import os
-from typing import Tuple
+from typing import Dict, Any, Tuple
 from django.core.files.storage import FileSystemStorage
 from django.core.files.uploadedfile import UploadedFile
 from ..utils.validators import validate_file_type, validate_file_size
@@ -12,6 +12,29 @@ class FileService:
 
     def __init__(self, storage: FileSystemStorage = None):
         self.storage = storage or FileSystemStorage()
+
+    def process_file(self, file: UploadedFile) -> Dict[str, Any]:
+        """
+        Process uploaded file with validation and storage.
+
+        Args:
+            file: Uploaded file object
+
+        Returns:
+            Dict containing success status and file information or error message
+        """
+        try:
+            filename, file_url = self.save_file(file)
+            return {
+                'success': True,
+                'file_url': file_url,
+                'filename': filename
+            }
+        except Exception as e:
+            return {
+                'success': False,
+                'error': str(e)
+            }
 
     def save_file(self, file: UploadedFile) -> Tuple[str, str]:
         """

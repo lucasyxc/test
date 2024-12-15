@@ -1,44 +1,66 @@
-from dataclasses import dataclass
-from datetime import date
-from typing import Optional
+from django.db import models
+from django.utils import timezone
+from .patient import PInfo
 
-@dataclass
-class CornealTopographyData:
-    """Data class for corneal topography measurements."""
-    k1: Optional[float] = None
-    k1_axis: Optional[float] = None
-    k2: Optional[float] = None
-    k2_axis: Optional[float] = None
-    delta_k: Optional[float] = None
-    pinge: Optional[float] = None
-    xiee: Optional[float] = None
-    is_value: Optional[float] = None  # Using is_value as 'is' is a Python keyword
-    sai: Optional[float] = None
-    sri: Optional[float] = None
-    pupil: Optional[float] = None
-    pupil_area: Optional[float] = None
-    hvid: Optional[float] = None
-    tfsq: Optional[float] = None
-    ctfsq: Optional[float] = None
+class PatientExaminationRecords(models.Model):
+    """Model for storing patient examination records."""
+    patient_id = models.ForeignKey(PInfo, on_delete=models.CASCADE)
+    examination_date = models.DateField(default=timezone.now)
+    file_url = models.CharField(max_length=255, null=True, blank=True)
+    exam_type = models.CharField(max_length=50, null=True, blank=True)
+    eye_position = models.CharField(max_length=10, null=True, blank=True)
 
-@dataclass
-class ExaminationRecord:
-    """Data class for patient examination records."""
-    patient_id: int
-    organization_id: str
-    examination_date: date
-    right_eye: Optional[CornealTopographyData] = None
-    left_eye: Optional[CornealTopographyData] = None
-    photo_path: Optional[str] = None
-    brand: Optional[str] = None
-    device: Optional[str] = None
-    right_first: Optional[bool] = None
-    left_first: Optional[bool] = None
+    # Right eye measurements
+    corneal_topography_right_eye_k1 = models.FloatField(null=True, blank=True)
+    corneal_topography_right_eye_k1_axis = models.FloatField(null=True, blank=True)
+    corneal_topography_right_eye_k2 = models.FloatField(null=True, blank=True)
+    corneal_topography_right_eye_k2_axis = models.FloatField(null=True, blank=True)
+    corneal_topography_right_eye_delta_k = models.FloatField(null=True, blank=True)
+    corneal_topography_right_pinge = models.FloatField(null=True, blank=True)
+    corneal_topography_right_xiee = models.FloatField(null=True, blank=True)
+    corneal_topography_right_is = models.FloatField(null=True, blank=True)
+    corneal_topography_right_sai = models.FloatField(null=True, blank=True)
+    corneal_topography_right_sri = models.FloatField(null=True, blank=True)
+    corneal_topography_right_pupil = models.FloatField(null=True, blank=True)
+    corneal_topography_right_pupil_area = models.FloatField(null=True, blank=True)
+    corneal_topography_right_hvid = models.FloatField(null=True, blank=True)
+    corneal_topography_right_tfsq = models.FloatField(null=True, blank=True)
+    corneal_topography_right_ctfsq = models.FloatField(null=True, blank=True)
 
-    def calculate_delta_k(self) -> None:
-        """Calculate delta_k for both eyes if k1 and k2 are available."""
-        if self.right_eye and self.right_eye.k1 is not None and self.right_eye.k2 is not None:
-            self.right_eye.delta_k = round(self.right_eye.k2 - self.right_eye.k1, 2)
+    # Left eye measurements
+    corneal_topography_left_eye_k1 = models.FloatField(null=True, blank=True)
+    corneal_topography_left_eye_k1_axis = models.FloatField(null=True, blank=True)
+    corneal_topography_left_eye_k2 = models.FloatField(null=True, blank=True)
+    corneal_topography_left_eye_k2_axis = models.FloatField(null=True, blank=True)
+    corneal_topography_left_eye_delta_k = models.FloatField(null=True, blank=True)
+    corneal_topography_left_pinge = models.FloatField(null=True, blank=True)
+    corneal_topography_left_xiee = models.FloatField(null=True, blank=True)
+    corneal_topography_left_is = models.FloatField(null=True, blank=True)
+    corneal_topography_left_sai = models.FloatField(null=True, blank=True)
+    corneal_topography_left_sri = models.FloatField(null=True, blank=True)
+    corneal_topography_left_pupil = models.FloatField(null=True, blank=True)
+    corneal_topography_left_pupil_area = models.FloatField(null=True, blank=True)
+    corneal_topography_left_hvid = models.FloatField(null=True, blank=True)
+    corneal_topography_left_tfsq = models.FloatField(null=True, blank=True)
+    corneal_topography_left_ctfsq = models.FloatField(null=True, blank=True)
 
-        if self.left_eye and self.left_eye.k1 is not None and self.left_eye.k2 is not None:
-            self.left_eye.delta_k = round(self.left_eye.k2 - self.left_eye.k1, 2)
+    class Meta:
+        db_table = 'patient_examination_records'
+        indexes = [
+            models.Index(fields=['patient_id', 'examination_date']),
+        ]
+
+class PatientReviewReminder(models.Model):
+    """Model for storing patient review reminders."""
+    patient_id = models.ForeignKey(PInfo, on_delete=models.CASCADE)
+    examination_record = models.ForeignKey(PatientExaminationRecords, on_delete=models.CASCADE)
+    last_review_date = models.DateField()
+    review_date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'patient_review_reminder'
+        indexes = [
+            models.Index(fields=['patient_id', 'review_date']),
+        ]

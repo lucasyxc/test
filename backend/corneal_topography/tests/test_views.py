@@ -65,10 +65,15 @@ class CornealTopographyViewTests(TestCase):
         )
         self.assertEqual(response.status_code, 400)
 
-    @patch('corneal_topography.services.cache_service.CacheService.get_patient')
-    def test_cached_patient_lookup(self, mock_cache):
+    @patch('corneal_topography.services.examination_service.ExaminationService.create_or_update_examination')
+    @patch('corneal_topography.services.file_service.FileService.process_file')
+    def test_cached_patient_lookup(self, mock_file, mock_exam):
         """Test patient data caching."""
-        mock_cache.return_value = self.patient
+        # Setup test data
+        mock_file.return_value = {'success': True, 'file_url': '/media/test.jpg'}
+        mock_exam.return_value = None
+
+        # First request should cache the patient
         response = self.client.post(
             reverse('corneal_topography'),
             data={
@@ -81,25 +86,8 @@ class CornealTopographyViewTests(TestCase):
             format='multipart'
         )
         self.assertEqual(response.status_code, 200)
-        mock_cache.assert_called_once_with('TEST123', 'ORG1')
 
-    def test_rate_limiting(self):
-        """Test rate limiting functionality."""
-        # Make requests up to the limit
-        for _ in range(99):
-            self.client.post(
-                reverse('corneal_topography'),
-                data={
-                    'file': self.valid_file,
-                    'organization_id': 'ORG1',
-                    'gkid': 'TEST123',
-                    'type': 'standard',
-                    'eye': 'right'
-                },
-                format='multipart'
-            )
-
-        # This request should be rate limited
+        # Second request should use cached patient
         response = self.client.post(
             reverse('corneal_topography'),
             data={
@@ -111,4 +99,42 @@ class CornealTopographyViewTests(TestCase):
             },
             format='multipart'
         )
-        self.assertEqual(response.status_code, 429)
+        self.assertEqual(response.status_code, 200)
+
+        # Verify cache was used
+        cached_patient = cache.get('patient:ORG1:TEST123')
+        self.assertIsNotNone(cached_patient)
+        self.assertEqual(cached_patient.gkid, 'TEST123')
+
+    def test_rate_limiting(self):
+        """Test rate limiting functionality."""
+        # Override rate limit settings for test
+        with self.settings(RATE_LIMIT={'default': {'LIMIT': 5, 'PERIOD': 60}}):
+            # Make requests up to the limit
+            for _ in range(4):
+                response = self.client.post(
+                    reverse('corneal_topography'),
+                    data={
+                        'file': self.valid_file,
+                        'organization_id': 'ORG1',
+                        'gkid': 'TEST123',
+                        'type': 'standard',
+                        'eye': 'right'
+                    },
+                    format='multipart'
+                )
+                self.assertEqual(response.status_code, 200)
+
+            # This request should be rate limited
+            response = self.client.post(
+                reverse('corneal_topography'),
+                data={
+                    'file': self.valid_file,
+                    'organization_id': 'ORG1',
+                    'gkid': 'TEST123',
+                    'type': 'standard',
+                    'eye': 'right'
+                },
+                format='multipart'
+            )
+            self.assertEqual(response.status_code, 429)
