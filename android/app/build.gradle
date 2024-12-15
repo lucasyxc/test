@@ -72,7 +72,7 @@ def enableProguardInReleaseBuilds = true
 def jscFlavor = 'org.webkit:android-jsc:+'
 
 android {
-    ndkVersion "25.1.8937393"
+    ndkVersion "26.1.10909125"
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
@@ -87,15 +87,6 @@ android {
 
         ndk {
             abiFilters 'arm64-v8a'
-        }
-    }
-
-    splits {
-        abi {
-            enable true
-            reset()
-            include 'arm64-v8a'
-            universalApk false
         }
     }
 
