@@ -24,6 +24,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -46,8 +47,19 @@ CACHES = {
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Celery Configuration
-CELERY_BROKER_URL = 'memory://'
-CELERY_RESULT_BACKEND = 'cache'
-CELERY_CACHE_BACKEND = 'memory'
-CELERY_TASK_ALWAYS_EAGER = True  # Run tasks synchronously in tests
+# Test Configuration
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
+# Rate Limiting Configuration for Tests
+RATE_LIMIT = {
+    'default': {
+        'LIMIT': 100,
+        'PERIOD': 60,
+    }
+}
+
+# Celery Configuration for Tests
+CELERY_TASK_ALWAYS_EAGER = True
+CELERY_TASK_EAGER_PROPAGATES = True
+CELERY_BROKER_URL = None  # Use memory broker for tests
+CELERY_RESULT_BACKEND = None

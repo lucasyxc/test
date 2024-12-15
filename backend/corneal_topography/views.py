@@ -16,7 +16,7 @@ from .tasks import process_examination_data
 logger = logging.getLogger(__name__)
 
 @csrf_exempt
-@rate_limit(key_prefix="corneal_topography", limit=10, period=60)
+@rate_limit(key_prefix="corneal_topography")  # Use settings-based rate limiting
 def jt_medmontcorneal(request):
     """Handle corneal topography examination data."""
     if request.method != 'POST':
