@@ -60,6 +60,7 @@ RATE_LIMIT = {
 
 # Celery Configuration for Tests
 CELERY_TASK_ALWAYS_EAGER = True
-CELERY_TASK_EAGER_PROPAGATES = True
-CELERY_BROKER_URL = None  # Use memory broker for tests
+CELERY_TASK_EAGER_PROPAGATES = False  # Don't propagate exceptions in test
+BROKER_BACKEND = 'memory'
+CELERY_BROKER_URL = 'memory://'
 CELERY_RESULT_BACKEND = None
