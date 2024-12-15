@@ -4,43 +4,43 @@ from django.http import JsonResponse
 from django.conf import settings
 import time
 
-def rate_limit(key_prefix: str, limit: int = None, period: int = None):
+def rate_limit(key_prefix='default', limit=None, period=None):
     """
-    Rate limiting decorator using Redis cache.
+    Rate limiting decorator that uses Django's cache backend.
 
     Args:
-        key_prefix: Prefix for rate limit key
-        limit: Maximum number of requests allowed in the period (defaults to settings)
-        period: Time period in seconds (defaults to settings)
+        key_prefix (str): Prefix for the rate limit key
+        limit (int): Number of requests allowed in the period
+        period (int): Time period in seconds
     """
     def decorator(view_func):
         @wraps(view_func)
         def wrapped_view(request, *args, **kwargs):
-            # Get limits from settings if not provided
-            rate_settings = getattr(settings, 'RATE_LIMIT', {}).get('default', {})
-            actual_limit = limit or rate_settings.get('LIMIT', 10)
-            actual_period = period or rate_settings.get('PERIOD', 60)
+            # Get settings from Django settings or use defaults
+            actual_limit = limit or getattr(settings, 'RATE_LIMIT', {}).get(key_prefix, {}).get('LIMIT', 100)
+            actual_period = period or getattr(settings, 'RATE_LIMIT', {}).get(key_prefix, {}).get('PERIOD', 3600)
 
-            # Generate a unique key for this IP and endpoint
-            client_ip = request.META.get('REMOTE_ADDR', 'unknown')
+            # Get client IP
+            client_ip = request.META.get('REMOTE_ADDR', '')
             cache_key = f"ratelimit:{key_prefix}:{client_ip}"
 
-            # Get current requests count
-            requests = cache.get(cache_key, [])
-            now = time.time()
+            # Get current count from cache
+            count = cache.get(cache_key, 0)
 
-            # Filter out old requests
-            requests = [req for req in requests if req > now - actual_period]
-
-            if len(requests) >= actual_limit:
+            # Check if limit is exceeded
+            if count >= actual_limit:
                 return JsonResponse(
                     {"error": "Rate limit exceeded. Please try again later."},
                     status=429
                 )
 
-            # Add current request timestamp
-            requests.append(now)
-            cache.set(cache_key, requests, actual_period)
+            # Increment the counter
+            if count == 0:
+                # First request, set with expiry
+                cache.set(cache_key, 1, actual_period)
+            else:
+                # Increment existing counter
+                cache.incr(cache_key)
 
             return view_func(request, *args, **kwargs)
         return wrapped_view
