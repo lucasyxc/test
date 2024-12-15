@@ -71,13 +71,16 @@ class CornealTopographyViewTests(TestCase):
 
     @patch('corneal_topography.services.examination_service.ExaminationService.create_or_update_examination')
     @patch('corneal_topography.services.file_service.FileService.process_file')
-    def test_cached_patient_lookup(self, mock_file, mock_exam):
+    @patch('corneal_topography.services.cache_service.CacheService.get_patient')
+    @patch('corneal_topography.services.cache_service.CacheService.set_patient')
+    def test_cached_patient_lookup(self, mock_set_patient, mock_get_patient, mock_file, mock_exam):
         """Test patient data caching."""
         # Setup test data
         mock_file.return_value = {'success': True, 'file_url': '/media/test.jpg'}
         mock_exam.return_value = None
+        mock_get_patient.return_value = None  # First call returns None (cache miss)
 
-        # First request should cache the patient
+        # First request should trigger cache set
         response = self.client.post(
             reverse('corneal_topography'),
             data={
@@ -91,18 +94,32 @@ class CornealTopographyViewTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
 
-        # Get the cache key using the same format as CacheService
-        from ..services.cache_service import CacheService
-        cache_service = CacheService()
-        cache_key = cache_service.get_cache_key(f"patient:ORG1", "TEST123")
+        # Verify cache operations
+        mock_get_patient.assert_called_once()
+        mock_set_patient.assert_called_once()
 
-        # Verify cache was used
-        cached_patient = cache.get(cache_key)
-        self.assertIsNotNone(cached_patient)
-        self.assertEqual(cached_patient.gkid, 'TEST123')
+        # Second request should use cached data
+        mock_get_patient.reset_mock()
+        mock_get_patient.return_value = self.patient  # Second call returns cached patient
+
+        response = self.client.post(
+            reverse('corneal_topography'),
+            data={
+                'file': self.valid_file,
+                'organization_id': 'ORG1',
+                'gkid': 'TEST123',
+                'type': 'standard',
+                'eye': 'right'
+            },
+            format='multipart'
+        )
+        self.assertEqual(response.status_code, 200)
+        mock_get_patient.assert_called_once()  # Verify cache was checked
+        mock_set_patient.assert_called_once()  # Should still be called only once from first request
 
     def test_rate_limiting(self):
         """Test rate limiting functionality."""
+        import time
         with self.settings(RATE_LIMIT={'default': {'LIMIT': 3, 'PERIOD': 60}}):
             # Make requests up to the limit
             for _ in range(3):
@@ -118,6 +135,7 @@ class CornealTopographyViewTests(TestCase):
                     format='multipart'
                 )
                 self.assertEqual(response.status_code, 200)
+                time.sleep(0.1)  # Small delay between requests
 
             # Next request should be rate limited
             response = self.client.post(
