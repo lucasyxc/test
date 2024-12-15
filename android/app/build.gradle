@@ -84,7 +84,21 @@ android {
         versionCode 1
         versionName "1.0.0"
         multiDexEnabled true
+
+        ndk {
+            abiFilters 'arm64-v8a'
+        }
     }
+
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'arm64-v8a'
+            universalApk false
+        }
+    }
+
     signingConfigs {
         debug {
             storeFile file('debug.keystore')
