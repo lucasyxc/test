@@ -26,12 +26,21 @@
 -dontwarn org.apache.pdfbox.**
 -dontwarn org.bouncycastle.**
 -dontwarn org.apache.commons.**
+-dontwarn java.awt.**
+-dontwarn javax.swing.**
+-dontwarn javax.xml.**
+-dontwarn org.w3c.dom.**
+-dontwarn org.osgi.**
 
 # Apache POI
 -keep class org.apache.poi.** { *; }
 -dontwarn org.apache.poi.**
 -dontwarn org.apache.xmlbeans.**
 -dontwarn org.openxmlformats.**
+-dontwarn org.etsi.**
+-dontwarn org.w3.**
+-dontwarn com.microsoft.schemas.**
+-dontwarn com.graphbuilder.**
 
 # Common Android
 -keepclassmembers class * implements android.os.Parcelable {
@@ -56,3 +65,16 @@
 -keepclasseswithmembernames class * {
     native <methods>;
 }
+
+# Missing classes from errors
+-dontwarn java.awt.Shape
+-dontwarn java.awt.geom.AffineTransform
+-dontwarn java.awt.geom.GeneralPath
+-dontwarn java.awt.geom.PathIterator
+-dontwarn java.awt.geom.Point2D$Float
+-dontwarn java.awt.geom.Point2D
+-dontwarn java.awt.geom.Rectangle2D
+-dontwarn org.osgi.framework.Bundle
+-dontwarn org.osgi.framework.BundleContext
+-dontwarn org.osgi.framework.FrameworkUtil
+-dontwarn org.osgi.framework.ServiceReference
