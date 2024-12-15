@@ -1,0 +1,7 @@
+Django>=4.2.0
+python-dateutil>=2.8.2
+Pillow>=10.0.0
+paddleocr>=2.7.0
+numpy>=1.24.0
+opencv-python>=4.8.0
+python-dotenv>=1.0.0
