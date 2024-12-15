@@ -8,11 +8,15 @@ from django.core.exceptions import ValidationError
 from .models.patient import PInfo
 from .services.file_service import FileService
 from .services.examination_service import ExaminationService
+from .services.cache_service import CacheService
 from .models.examination import CornealTopographyData
+from .services.rate_limiter import rate_limit
+from .tasks import process_examination_data
 
 logger = logging.getLogger(__name__)
 
 @csrf_exempt
+@rate_limit(key_prefix="corneal_topography", limit=10, period=60)
 def jt_medmontcorneal(request):
     """Handle corneal topography examination data."""
     if request.method != 'POST':
@@ -23,6 +27,7 @@ def jt_medmontcorneal(request):
         # Initialize services
         file_service = FileService()
         examination_service = ExaminationService()
+        cache_service = CacheService()
 
         # Extract and validate required fields
         organization_id = request.POST.get('organization_id')
@@ -43,18 +48,21 @@ def jt_medmontcorneal(request):
             return JsonResponse({"error": str(e)}, status=400)
 
         # Get patient information
-        try:
-            patient = PInfo.objects.filter(
-                gkid=patient_gkid,
-                organizationid=organization_id
-            ).first()
-            if not patient:
-                logger.error("Patient not found: %s", patient_gkid)
-                return JsonResponse({"error": "Patient not found"}, status=404)
-            logger.info("Found patient: %s, ID: %s", patient.name, patient.id)
-        except Exception as e:
-            logger.error("Patient lookup failed: %s", str(e))
-            return JsonResponse({"error": "Patient lookup failed"}, status=500)
+        patient = cache_service.get_patient(patient_gkid, organization_id)
+        if not patient:
+            try:
+                patient = PInfo.objects.filter(
+                    gkid=patient_gkid,
+                    organizationid=organization_id
+                ).first()
+                if not patient:
+                    logger.error("Patient not found: %s", patient_gkid)
+                    return JsonResponse({"error": "Patient not found"}, status=404)
+                logger.info("Found patient: %s, ID: %s", patient.name, patient.id)
+                cache_service.set_patient(patient_gkid, organization_id, patient)
+            except Exception as e:
+                logger.error("Patient lookup failed: %s", str(e))
+                return JsonResponse({"error": "Patient lookup failed"}, status=500)
 
         # Process examination data
         current_date = datetime.now().date()
@@ -86,12 +94,8 @@ def jt_medmontcorneal(request):
             examination_data['left_eye_data'] = eye_data
             examination_data['left_first'] = True
 
-        # Create or update examination record
-        try:
-            record = examination_service.create_or_update_examination(**examination_data)
-        except Exception as e:
-            logger.error("Failed to save examination: %s", str(e))
-            return JsonResponse({"error": "Failed to save examination"}, status=500)
+        # Create or update examination record asynchronously
+        process_examination_data.delay(examination_data)
 
         # Update patient information
         patient.total_exam_count += 1
@@ -102,7 +106,7 @@ def jt_medmontcorneal(request):
         response_data = {
             "time": current_date.strftime('%Y-%m-%d'),
             "patient_name": patient.name,
-            "createStatus": "当日新建" if record else "当日已有",
+            "createStatus": "当日新建",
             "checkStatus": "Medmonte300",
             "patient_creation_time": patient.createDate.strftime('%Y-%m-%d') if patient.createDate else None
         }
