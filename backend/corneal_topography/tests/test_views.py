@@ -4,7 +4,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 from django.core.cache import cache
 from ..models.patient import PInfo
-from ..views import jt_medmontcorneal
+from ..views import jt_Medmontcorneal
 
 class CornealTopographyViewTests(TestCase):
     """Test corneal topography view functionality."""
@@ -22,12 +22,8 @@ class CornealTopographyViewTests(TestCase):
             b"file_content",
             content_type="image/jpeg"
         )
-        # Clear cache and rate limit data before each test
+        # Clear cache before each test
         cache.clear()
-        # Reset rate limit counters
-        cache_keys = cache.keys("ratelimit:*")
-        for key in cache_keys:
-            cache.delete(key)
 
     def tearDown(self):
         """Clean up after each test."""
@@ -107,10 +103,9 @@ class CornealTopographyViewTests(TestCase):
 
     def test_rate_limiting(self):
         """Test rate limiting functionality."""
-        # Override rate limit settings for test
-        with self.settings(RATE_LIMIT={'default': {'LIMIT': 5, 'PERIOD': 60}}):
+        with self.settings(RATE_LIMIT={'default': {'LIMIT': 3, 'PERIOD': 60}}):
             # Make requests up to the limit
-            for _ in range(4):
+            for _ in range(3):
                 response = self.client.post(
                     reverse('corneal_topography'),
                     data={
@@ -124,7 +119,7 @@ class CornealTopographyViewTests(TestCase):
                 )
                 self.assertEqual(response.status_code, 200)
 
-            # This request should be rate limited
+            # Next request should be rate limited
             response = self.client.post(
                 reverse('corneal_topography'),
                 data={
@@ -137,3 +132,4 @@ class CornealTopographyViewTests(TestCase):
                 format='multipart'
             )
             self.assertEqual(response.status_code, 429)
+            self.assertIn('Rate limit exceeded', str(response.content))

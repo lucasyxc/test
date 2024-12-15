@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 @csrf_exempt
 @rate_limit(key_prefix="corneal_topography")
-def jt_medmontcorneal(request):
+def jt_Medmontcorneal(request):
     """Handle corneal topography examination data."""
     if request.method != 'POST':
         logger.warning("Invalid request method: %s", request.method)
