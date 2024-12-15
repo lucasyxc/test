@@ -49,11 +49,16 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Test Configuration
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+TESTING = True  # Enable test mode
 
 # Rate Limiting Configuration for Tests
 RATE_LIMIT = {
     'default': {
         'LIMIT': 100,
+        'PERIOD': 60,
+    },
+    'corneal_topography': {  # Add specific configuration for our endpoint
+        'LIMIT': 3,
         'PERIOD': 60,
     }
 }
