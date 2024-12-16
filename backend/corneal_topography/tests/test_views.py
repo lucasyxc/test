@@ -4,13 +4,14 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 from django.core.cache import cache
 from ..models.patient import PInfo
-from ..views import jt_Medmontcorneal
+from ..views import jt_Medmontcorneal, get_ocr_service
 import pytest
 import logging
 
 class CornealTopographyViewTests(TestCase):
     """Test corneal topography view functionality."""
 
+    @patch('corneal_topography.views._ocr_service', None)
     def setUp(self):
         """Set up test environment."""
         self.client = Client()
@@ -35,9 +36,18 @@ class CornealTopographyViewTests(TestCase):
         if os.path.exists('media'):
             shutil.rmtree('media')
 
+    @patch('corneal_topography.views.get_ocr_service')
     @patch('corneal_topography.tasks.process_examination_data.delay')
-    def test_valid_post_request(self, mock_process):
+    def test_valid_post_request(self, mock_process, mock_get_ocr):
         """Test valid POST request processing."""
+        # Setup mock OCR
+        mock_ocr_service = Mock()
+        mock_ocr_service.process_image.return_value = {
+            'text_blocks': [{'text': 'K1: 43.5', 'confidence': 0.99}],
+            'rotation_angle': 0
+        }
+        mock_get_ocr.return_value = mock_ocr_service
+
         response = self.client.post(
             reverse('corneal_topography'),
             data={
@@ -52,8 +62,13 @@ class CornealTopographyViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         mock_process.assert_called_once()
 
-    def test_invalid_file_type(self):
+    @patch('corneal_topography.views.get_ocr_service')
+    def test_invalid_file_type(self, mock_get_ocr):
         """Test invalid file type handling."""
+        # Setup mock OCR
+        mock_ocr_service = Mock()
+        mock_get_ocr.return_value = mock_ocr_service
+
         response = self.client.post(
             reverse('corneal_topography'),
             data={
@@ -70,16 +85,29 @@ class CornealTopographyViewTests(TestCase):
             format='multipart'
         )
         self.assertEqual(response.status_code, 400)
+        mock_ocr_service.process_image.assert_not_called()
 
+    @patch('corneal_topography.views.get_ocr_service')
     @patch('corneal_topography.tasks.process_examination_data.delay')
     @patch('corneal_topography.services.examination_service.ExaminationService.create_or_update_examination')
-    @patch('corneal_topography.services.file_service.FileService.process_file')
+    @patch('corneal_topography.services.file_service.FileService.validate_and_save_file')
     @patch('corneal_topography.services.cache_service.CacheService.get_patient')
     @patch('corneal_topography.services.cache_service.CacheService.set_patient')
-    def test_cached_patient_lookup(self, mock_set_patient, mock_get_patient, mock_file, mock_exam, mock_task):
+    def test_cached_patient_lookup(
+        self, mock_set_patient, mock_get_patient, mock_file,
+        mock_exam, mock_task, mock_get_ocr
+    ):
         """Test patient data caching."""
+        # Setup mock OCR
+        mock_ocr_service = Mock()
+        mock_ocr_service.process_image.return_value = {
+            'text_blocks': [{'text': 'K1: 43.5', 'confidence': 0.99}],
+            'rotation_angle': 0
+        }
+        mock_get_ocr.return_value = mock_ocr_service
+
         # Setup test data
-        mock_file.return_value = {'success': True, 'file_url': '/media/test.jpg'}
+        mock_file.return_value = (True, None, '/media/test.jpg')  # success, error_msg, file_url
         mock_exam.return_value = None
         mock_get_patient.return_value = None  # First call returns None (cache miss)
         mock_task.return_value = None
@@ -125,9 +153,18 @@ class CornealTopographyViewTests(TestCase):
         mock_task.assert_called_once()  # Task should still be called for new examination
 
     @pytest.mark.timeout(10)  # Set 10-second timeout
+    @patch('corneal_topography.views.get_ocr_service')
     @patch('corneal_topography.tasks.process_examination_data.delay')
-    def test_rate_limiting(self, mock_task):
+    def test_rate_limiting(self, mock_task, mock_get_ocr):
         """Test rate limiting functionality."""
+        # Setup mock OCR
+        mock_ocr_service = Mock()
+        mock_ocr_service.process_image.return_value = {
+            'text_blocks': [{'text': 'K1: 43.5', 'confidence': 0.99}],
+            'rotation_angle': 0
+        }
+        mock_get_ocr.return_value = mock_ocr_service
+
         import time
         logger = logging.getLogger('corneal_topography.services.rate_limiter')
         logger.setLevel(logging.DEBUG)
