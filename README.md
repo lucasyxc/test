@@ -1,1 +1,1 @@
-# test
+# RNMonitorApp\n\n## 环境要求\n- Node.js v18.20.5\n- npm v10.8.2\n- Android Studio (可选，仅用于开发)\n\n## 快速开始\n1. 克隆项目\n2. 运行 `npm install`\n3. 连接Android设备或启动模拟器\n4. 运行 `npx react-native run-android`\n\n## 功能说明\n1. 登录功能\n   - 账号密码登录\n   - 自动保存机构信息\n2. 文件监控功能\n   - 监控下载目录新增PDF文件\n   - 自动提示新文件生成\n\n## 注意事项\n- 请确保已授予应用存储权限\n- Android设备需开启USB调试模式\n\n## 技术栈\n- React Native\n- TypeScript\n- React Native FS\n- AsyncStorage\n\n## 开发者说明\n项目使用TypeScript开发，确保类型安全和代码可维护性。所有依赖已预先配置，无需额外安装。
