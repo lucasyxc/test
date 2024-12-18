@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Alert,
   PermissionsAndroid,
+  Linking,
 } from 'react-native';
 import RNFS from 'react-native-fs';
 
@@ -22,20 +23,44 @@ const WelcomeComponent: React.FC<WelcomeComponentProps> = ({ organizationName })
   const [isMonitoring, setIsMonitoring] = useState(false);
   const DOWNLOAD_PATH = '/storage/emulated/0/Download';
   const watcherRef = useRef<NodeJS.Timeout | null>(null);
+  const openSettings = async () => await Linking.openSettings();
 
   const requestStoragePermission = async () => {
     try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-        {
-          title: "文件访问权限",
-          message: "需要访问下载文件夹以监控PDF文件",
-          buttonNeutral: "稍后询问",
-          buttonNegative: "取消",
-          buttonPositive: "确定"
+      // Check current permission status
+      const readStatus = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
+      const writeStatus = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+
+      // If either permission is not granted, request both
+      if (!readStatus || !writeStatus) {
+        // Request both permissions
+        const result = await PermissionsAndroid.requestMultiple([
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        ]);
+
+        const isGranted = (
+          result['android.permission.READ_EXTERNAL_STORAGE'] === PermissionsAndroid.RESULTS.GRANTED &&
+          result['android.permission.WRITE_EXTERNAL_STORAGE'] === PermissionsAndroid.RESULTS.GRANTED
+        );
+
+        // If permissions were denied, show settings dialog
+        if (!isGranted) {
+          Alert.alert(
+            '需要权限',
+            '请在设置中授予存储权限以继续使用此功能',
+            [
+              { text: '取消', style: 'cancel' },
+              { text: '去设置', onPress: openSettings }
+            ]
+          );
+          return false;
         }
-      );
-      return granted === PermissionsAndroid.RESULTS.GRANTED;
+
+        return isGranted;
+      }
+
+      return true; // Both permissions are already granted
     } catch (err) {
       console.warn(err);
       return false;
@@ -46,7 +71,6 @@ const WelcomeComponent: React.FC<WelcomeComponentProps> = ({ organizationName })
     try {
       const hasPermission = await requestStoragePermission();
       if (!hasPermission) {
-        Alert.alert('错误', '需要文件访问权限才能监控下载文件夹');
         return;
       }
 

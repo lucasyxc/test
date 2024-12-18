@@ -198,10 +198,10 @@
       externalAnnotations="annotations.zip"
       proguardRules="proguard.txt"/>
   <library
-      name="/home/ubuntu/RNMonitorApp/android@@:react-native-async-storage_async-storage::release"
-      jars="/home/ubuntu/RNMonitorApp/node_modules/@react-native-async-storage/async-storage/android/build/.transforms/60fafe330aa07d16e103bc1a9515d889/transformed/out/jars/classes.jar:/home/ubuntu/RNMonitorApp/node_modules/@react-native-async-storage/async-storage/android/build/.transforms/60fafe330aa07d16e103bc1a9515d889/transformed/out/jars/libs/R.jar"
+      name="/home/ubuntu/repos/test/android@@:react-native-async-storage_async-storage::release"
+      jars="/home/ubuntu/repos/test/node_modules/@react-native-async-storage/async-storage/android/build/.transforms/5ee826f2b590ee1961ce2c953f832e27/transformed/out/jars/classes.jar:/home/ubuntu/repos/test/node_modules/@react-native-async-storage/async-storage/android/build/.transforms/5ee826f2b590ee1961ce2c953f832e27/transformed/out/jars/libs/R.jar"
       resolved="RNMonitorApp:react-native-async-storage_async-storage:unspecified"
-      folder="/home/ubuntu/RNMonitorApp/node_modules/@react-native-async-storage/async-storage/android/build/.transforms/60fafe330aa07d16e103bc1a9515d889/transformed/out"
+      folder="/home/ubuntu/repos/test/node_modules/@react-native-async-storage/async-storage/android/build/.transforms/5ee826f2b590ee1961ce2c953f832e27/transformed/out"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -211,10 +211,10 @@
       externalAnnotations="annotations.zip"
       proguardRules="proguard.txt"/>
   <library
-      name="/home/ubuntu/RNMonitorApp/android@@:react-native-fs::release"
-      jars="/home/ubuntu/RNMonitorApp/node_modules/react-native-fs/android/build/.transforms/fdb5cace233074fa5f6d93360ce29b2b/transformed/out/jars/classes.jar:/home/ubuntu/RNMonitorApp/node_modules/react-native-fs/android/build/.transforms/fdb5cace233074fa5f6d93360ce29b2b/transformed/out/jars/libs/R.jar"
+      name="/home/ubuntu/repos/test/android@@:react-native-fs::release"
+      jars="/home/ubuntu/repos/test/node_modules/react-native-fs/android/build/.transforms/4618c6a10b576ea9a21ffdac74e38b6d/transformed/out/jars/classes.jar:/home/ubuntu/repos/test/node_modules/react-native-fs/android/build/.transforms/4618c6a10b576ea9a21ffdac74e38b6d/transformed/out/jars/libs/R.jar"
       resolved="RNMonitorApp:react-native-fs:unspecified"
-      folder="/home/ubuntu/RNMonitorApp/node_modules/react-native-fs/android/build/.transforms/fdb5cace233074fa5f6d93360ce29b2b/transformed/out"
+      folder="/home/ubuntu/repos/test/node_modules/react-native-fs/android/build/.transforms/4618c6a10b576ea9a21ffdac74e38b6d/transformed/out"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
