@@ -36,6 +36,6 @@
       applicationId="com.rnmonitorapp"
       generatedSourceFolders="build/generated/ap_generated_sources/release/out:build/generated/source/buildConfig/release"
       generatedResourceFolders="build/generated/res/resValues/release"
-      desugaredMethodsFiles="/home/ubuntu/.gradle/caches/transforms-3/aa9ac3f1699ba836841a28d436d592ab/transformed/D8BackportedDesugaredMethods.txt">
+      desugaredMethodsFiles="/home/ubuntu/.gradle/caches/transforms-3/8893afc62dd0e5068e92b7eee387c5a0/transformed/D8BackportedDesugaredMethods.txt">
   </mainArtifact>
 </variant>

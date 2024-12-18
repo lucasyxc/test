@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.rnmonitorapp-mergeReleaseResources-24:/values-land/values-land.xml",
+            "outputFile": "com.rnmonitorapp-mergeReleaseResources-32:/values-land/values-land.xml",
             "map": [
                 {
-                    "source": "/home/ubuntu/.gradle/caches/transforms-3/b3627ca143232ec2ceb6e319eb18971d/transformed/appcompat-1.6.1/res/values-land/values-land.xml",
+                    "source": "/home/ubuntu/.gradle/caches/transforms-3/041408d8d8f892c7b52b5df56c18b026/transformed/appcompat-1.6.1/res/values-land/values-land.xml",
                     "from": {
                         "startLines": "2,3,4",
                         "startColumns": "4,4,4",

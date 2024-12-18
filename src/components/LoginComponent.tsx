@@ -10,7 +10,7 @@ import {
 import { AuthService } from '../services/AuthService';
 
 interface LoginComponentProps {
-  onLoginSuccess: (organizationId: string, organizationName: string) => void;
+  onLoginSuccess: (organizationId: string, organizationName: string) => Promise<void>;
 }
 
 const LoginComponent: React.FC<LoginComponentProps> = ({ onLoginSuccess }) => {

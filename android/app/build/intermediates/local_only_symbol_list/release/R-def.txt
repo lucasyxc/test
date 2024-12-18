@@ -1,9 +1,21 @@
 R_DEF: Internal format may change without notice
 local
+bool notification_enabled
+bool notification_play_sound
+bool notification_vibrate
+color notification_color
 drawable rn_edit_text_material
 integer react_native_dev_server_port
 integer react_native_inspector_proxy_port
 mipmap ic_launcher
 mipmap ic_launcher_round
 string app_name
+string gcm_defaultSenderId
+string google_api_key
+string google_app_id
+string google_crash_reporting_api_key
+string notification_channel_description
+string notification_channel_id
+string notification_channel_name
+string project_id
 style AppTheme

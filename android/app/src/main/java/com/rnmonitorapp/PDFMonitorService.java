@@ -8,8 +8,12 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.util.Log;
+import android.content.pm.PackageManager;
+import android.Manifest;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
 import com.facebook.react.HeadlessJsTaskService;
 import com.facebook.react.bridge.Arguments;
@@ -19,17 +23,55 @@ import com.facebook.react.jstasks.HeadlessJsTaskConfig;
 import java.util.concurrent.TimeUnit;
 
 public class PDFMonitorService extends HeadlessJsTaskService {
+    private static final String TAG = "PDFMonitorService";
     private static final String TASK_NAME = "PDFMonitorTask";
     private static final long TIMEOUT = TimeUnit.DAYS.toMillis(1); // 1 day timeout
     private static final String CHANNEL_ID = "pdf_monitor_service";
     private static final int NOTIFICATION_ID = 1;
+    private PowerManager.WakeLock wakeLock;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        createNotificationChannel();
-        startForeground(NOTIFICATION_ID, buildNotification());
-        acquireWakeLock(); // Add wake lock to keep service running
+        try {
+            if (!checkPermissions()) {
+                Log.e(TAG, "Required permissions not granted. Stopping service.");
+                stopSelf();
+                return;
+            }
+            createNotificationChannel();
+            startForeground(NOTIFICATION_ID, buildNotification());
+            acquireWakeLock();
+            Log.i(TAG, "PDF Monitor Service started successfully");
+        } catch (Exception e) {
+            Log.e(TAG, "Error starting service", e);
+            stopSelf();
+        }
+    }
+
+    private boolean checkPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+                Log.e(TAG, "Notification permission not granted");
+                return false;
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.MANAGE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+                Log.e(TAG, "Storage permission not granted");
+                return false;
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+                Log.e(TAG, "Storage permission not granted");
+                return false;
+            }
+        }
+        return true;
     }
 
     private void createNotificationChannel() {
@@ -67,33 +109,51 @@ public class PDFMonitorService extends HeadlessJsTaskService {
 
     @Override
     protected @Nullable HeadlessJsTaskConfig getTaskConfig(Intent intent) {
-        Bundle extras = intent.getExtras();
-        WritableMap data = extras != null ? Arguments.fromBundle(extras) : Arguments.createMap();
-
-        return new HeadlessJsTaskConfig(
-            TASK_NAME,
-            data,
-            TIMEOUT,
-            true // Allow the task to run in foreground
-        );
+        try {
+            Bundle extras = intent.getExtras();
+            WritableMap data = extras != null ? Arguments.fromBundle(extras) : Arguments.createMap();
+            return new HeadlessJsTaskConfig(
+                TASK_NAME,
+                data,
+                TIMEOUT,
+                true // Allow the task to run in foreground
+            );
+        } catch (Exception e) {
+            Log.e(TAG, "Error creating task config", e);
+            return null;
+        }
     }
 
-    private PowerManager.WakeLock wakeLock;
-
     private void acquireWakeLock() {
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(
-            PowerManager.PARTIAL_WAKE_LOCK,
-            "PDFMonitorService::WakeLock"
-        );
-        wakeLock.acquire();
+        try {
+            PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+            if (powerManager != null) {
+                wakeLock = powerManager.newWakeLock(
+                    PowerManager.PARTIAL_WAKE_LOCK,
+                    "PDFMonitorService::WakeLock"
+                );
+                wakeLock.setReferenceCounted(false);
+                wakeLock.acquire(TIMEOUT);
+                Log.i(TAG, "Wake lock acquired successfully");
+            } else {
+                Log.e(TAG, "PowerManager service not available");
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error acquiring wake lock", e);
+        }
     }
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
-        if (wakeLock != null && wakeLock.isHeld()) {
-            wakeLock.release();
+        try {
+            if (wakeLock != null && wakeLock.isHeld()) {
+                wakeLock.release();
+                Log.i(TAG, "Wake lock released");
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error releasing wake lock", e);
+        } finally {
+            super.onDestroy();
         }
     }
 }

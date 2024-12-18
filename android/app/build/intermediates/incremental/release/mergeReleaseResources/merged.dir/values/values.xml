@@ -7,6 +7,9 @@
     <attr format="string" name="title"/>
     <bool name="abc_action_bar_embed_tabs">true</bool>
     <bool name="abc_config_actionMenuItemAllCaps">true</bool>
+    <bool name="notification_enabled">true</bool>
+    <bool name="notification_play_sound">false</bool>
+    <bool name="notification_vibrate">false</bool>
     <color name="abc_decor_view_status_guard">#ff000000</color>
     <color name="abc_decor_view_status_guard_light">#ffffffff</color>
     <color name="abc_search_url_text_normal">#7fa87f</color>
@@ -30,6 +33,14 @@
     <color name="button_material_light">#ffd6d7d7</color>
     <color name="catalyst_logbox_background">#ffffffff</color>
     <color name="catalyst_redbox_background">#eecc0000</color>
+    <color name="common_google_signin_btn_text_dark_default">@android:color/white</color>
+    <color name="common_google_signin_btn_text_dark_disabled">#1F000000</color>
+    <color name="common_google_signin_btn_text_dark_focused">@android:color/black</color>
+    <color name="common_google_signin_btn_text_dark_pressed">@android:color/white</color>
+    <color name="common_google_signin_btn_text_light_default">#90000000</color>
+    <color name="common_google_signin_btn_text_light_disabled">#1F000000</color>
+    <color name="common_google_signin_btn_text_light_focused">#90000000</color>
+    <color name="common_google_signin_btn_text_light_pressed">#DE000000</color>
     <color name="dim_foreground_disabled_material_dark">#80bebebe</color>
     <color name="dim_foreground_disabled_material_light">#80323232</color>
     <color name="dim_foreground_material_dark">#ffbebebe</color>
@@ -53,6 +64,7 @@
     <color name="material_grey_850">#ff303030</color>
     <color name="material_grey_900">#ff212121</color>
     <color name="notification_action_color_filter">#ffffffff</color>
+    <color name="notification_color">#4CAF50</color>
     <color name="notification_icon_bg_color">#ff9e9e9e</color>
     <color name="primary_dark_material_dark">@android:color/black</color>
     <color name="primary_dark_material_light">@color/material_grey_600</color>
@@ -287,6 +299,7 @@
     <integer name="abc_config_activityShortDur">150</integer>
     <integer name="cancel_button_image_alpha">127</integer>
     <integer name="config_tooltipAnimTime">150</integer>
+    <integer name="google_play_services_version">12451000</integer>
     <integer name="react_native_dev_server_port">8081</integer>
     <integer name="react_native_inspector_proxy_port">8081</integer>
     <integer name="status_bar_notification_info_maxnum">999</integer>
@@ -348,6 +361,29 @@
     <string name="catalyst_settings" project="catalyst" translatable="false">Settings</string>
     <string name="catalyst_settings_title" project="catalyst" translatable="false">Debug Settings</string>
     <string description="input that controls another element that can pop up to help the user set the value of that input" name="combobox_description">Combo Box</string>
+    <string msgid="2523291102206661146" name="common_google_play_services_enable_button">Enable</string>
+    <string msgid="227660514972886228" name="common_google_play_services_enable_text"><ns1:g id="app_name">%1$s</ns1:g> won\'t work unless you enable Google Play services.</string>
+    <string msgid="5122002158466380389" name="common_google_play_services_enable_title">Enable Google Play services</string>
+    <string msgid="7153882981874058840" name="common_google_play_services_install_button">Install</string>
+    <string name="common_google_play_services_install_text"><ns1:g id="app_name">%1$s</ns1:g> won\'t run without Google Play services, which are missing from your device.</string>
+    <string msgid="7215213145546190223" name="common_google_play_services_install_title">Get Google Play services</string>
+    <string name="common_google_play_services_notification_channel_name">Google Play services availability</string>
+    <string name="common_google_play_services_notification_ticker">Google Play services error</string>
+    <string name="common_google_play_services_unknown_issue"><ns1:g id="app_name">%1$s</ns1:g> is having trouble with Google Play services. Please try again.</string>
+    <string name="common_google_play_services_unsupported_text"><ns1:g id="app_name">%1$s</ns1:g> won\'t run without Google Play services, which are not supported by your device.</string>
+    <string msgid="6556509956452265614" name="common_google_play_services_update_button">Update</string>
+    <string msgid="9053896323427875356" name="common_google_play_services_update_text"><ns1:g id="app_name">%1$s</ns1:g> won\'t run unless you update Google Play services.</string>
+    <string msgid="6006316683626838685" name="common_google_play_services_update_title">Update Google Play services</string>
+    <string name="common_google_play_services_updating_text"><ns1:g id="app_name">%1$s</ns1:g> won\'t run without Google Play services, which are currently updating.</string>
+    <string name="common_google_play_services_wear_update_text">New version of Google Play services needed. It will update itself shortly.</string>
+    <string name="common_open_on_phone">Open on phone</string>
+    <string name="common_signin_button_text">Sign in</string>
+    <string name="common_signin_button_text_long">Sign in with Google</string>
+    <string name="fcm_fallback_notification_channel_label">Miscellaneous</string>
+    <string name="gcm_defaultSenderId" translatable="false">123456789000</string>
+    <string name="google_api_key" translatable="false">AIzaSyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</string>
+    <string name="google_app_id" translatable="false">1:123456789000:android:1234567890abcdef</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</string>
     <string description="heading to a page or section" name="header_description">Heading</string>
     <string description="images, code snippets, text, emojis, or other content that can be combined to deliver information in a visual manner" name="image_description">Image</string>
     <string description="Displays a button with an image (instead of text) that can be pressed or clicked by the user" name="imagebutton_description">Button, Image</string>
@@ -355,7 +391,11 @@
     <string description="offers a list of choices to the user" name="menu_description">Menu</string>
     <string description="presentation of menu that usually remains visible and is usually presented horizontally" name="menubar_description">Menu Bar</string>
     <string description="an option in a set of choices contained by a menu or menubar" name="menuitem_description">Menu Item</string>
+    <string name="notification_channel_description">PDF文件监控通知</string>
+    <string name="notification_channel_id">pdf-monitor</string>
+    <string name="notification_channel_name">PDF Monitor</string>
     <string description="displays the progress status for tasks that take a long time" name="progressbar_description">Progress Bar</string>
+    <string name="project_id" translatable="false">rnmonitorapp</string>
     <string description="a group of radio buttons" name="radiogroup_description">Radio Group</string>
     <string description="an interactive element inside a tablist" name="rn_tab_description">Tab</string>
     <string description="controls the scrolling of content within a viewing area" name="scrollbar_description">Scroll Bar</string>
@@ -3045,6 +3085,19 @@
         
         <attr name="android:dropDownHorizontalOffset"/>
     </declare-styleable>
+    <declare-styleable name="LoadingImageView"><attr name="imageAspectRatioAdjust">
+<enum name="none" value="0"/>
+
+<enum name="adjust_width" value="1"/>
+
+<enum name="adjust_height" value="2"/>
+
+</attr>
+
+<attr format="float" name="imageAspectRatio"/>
+
+<attr format="boolean" name="circleCrop"/>
+</declare-styleable>
     <declare-styleable name="MenuGroup">
 
         
@@ -3261,6 +3314,25 @@
         <attr format="reference" name="submitBackground"/>
         <attr name="android:focusable"/>
     </declare-styleable>
+    <declare-styleable name="SignInButton"><attr format="reference" name="buttonSize">
+<enum name="standard" value="0"/>
+
+<enum name="wide" value="1"/>
+
+<enum name="icon_only" value="2"/>
+
+</attr>
+<attr format="reference" name="colorScheme">
+<enum name="dark" value="0"/>
+
+<enum name="light" value="1"/>
+
+<enum name="auto" value="2"/>
+
+</attr>
+
+<attr format="reference|string" name="scopeUris"/>
+</declare-styleable>
     <declare-styleable name="SimpleDraweeView" parent="GenericDraweeHierarchy">
 
     

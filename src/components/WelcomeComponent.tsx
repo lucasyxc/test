@@ -15,6 +15,7 @@ import RNFS from 'react-native-fs';
 interface WelcomeComponentProps {
   organizationName: string;
   onLogout: () => Promise<void>;
+  requestPermissions: () => Promise<boolean>;
 }
 
 interface FSEvent {
@@ -22,7 +23,7 @@ interface FSEvent {
   type: string;
 }
 
-const WelcomeComponent: React.FC<WelcomeComponentProps> = ({ organizationName, onLogout }) => {
+const WelcomeComponent: React.FC<WelcomeComponentProps> = ({ organizationName, onLogout, requestPermissions }) => {
   const [isMonitoring, setIsMonitoring] = useState(false);
   const DOWNLOAD_PATH = '/storage/emulated/0/Download';
   const watcherRef = useRef<NodeJS.Timeout | null>(null);
@@ -147,7 +148,7 @@ const WelcomeComponent: React.FC<WelcomeComponentProps> = ({ organizationName, o
 
   const startMonitoring = async () => {
     try {
-      const hasPermission = await requestStoragePermission();
+      const hasPermission = await requestPermissions();
       if (!hasPermission) {
         return;
       }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="notification_enabled">true</bool>
+    <bool name="notification_play_sound">false</bool>
+    <bool name="notification_vibrate">false</bool>
+    <string name="notification_channel_id">pdf-monitor</string>
+    <string name="notification_channel_name">PDF Monitor</string>
+    <string name="notification_channel_description">PDF文件监控通知</string>
+</resources>

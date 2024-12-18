@@ -7,7 +7,7 @@
     mergedManifest="build/intermediates/merged_manifest/release/AndroidManifest.xml"
     proguardFiles="build/intermediates/default_proguard_files/global/proguard-android.txt-8.1.1:proguard-rules.pro"
     partialResultsDir="build/intermediates/lint_vital_partial_results/release/out"
-    desugaredMethodsFiles="/home/ubuntu/.gradle/caches/transforms-3/aa9ac3f1699ba836841a28d436d592ab/transformed/D8BackportedDesugaredMethods.txt">
+    desugaredMethodsFiles="/home/ubuntu/.gradle/caches/transforms-3/8893afc62dd0e5068e92b7eee387c5a0/transformed/D8BackportedDesugaredMethods.txt">
   <buildFeatures
       namespacing="REQUIRED"/>
   <sourceProviders>
@@ -36,6 +36,6 @@
       applicationId="com.rnmonitorapp"
       generatedSourceFolders="build/generated/ap_generated_sources/release/out:build/generated/source/buildConfig/release"
       generatedResourceFolders="build/generated/res/resValues/release"
-      desugaredMethodsFiles="/home/ubuntu/.gradle/caches/transforms-3/aa9ac3f1699ba836841a28d436d592ab/transformed/D8BackportedDesugaredMethods.txt">
+      desugaredMethodsFiles="/home/ubuntu/.gradle/caches/transforms-3/8893afc62dd0e5068e92b7eee387c5a0/transformed/D8BackportedDesugaredMethods.txt">
   </mainArtifact>
 </variant>
