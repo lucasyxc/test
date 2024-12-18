@@ -7,6 +7,8 @@ import {
   Alert,
   PermissionsAndroid,
   Linking,
+  Platform,
+  NativeModules,
 } from 'react-native';
 import RNFS from 'react-native-fs';
 
@@ -28,42 +30,117 @@ const WelcomeComponent: React.FC<WelcomeComponentProps> = ({ organizationName, o
 
   const requestStoragePermission = async () => {
     try {
-      // Check current permission status
-      const readStatus = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
-      const writeStatus = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
-
-      // If either permission is not granted, request both
-      if (!readStatus || !writeStatus) {
-        // Request both permissions
-        const result = await PermissionsAndroid.requestMultiple([
-          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        ]);
-
-        const isGranted = (
-          result['android.permission.READ_EXTERNAL_STORAGE'] === PermissionsAndroid.RESULTS.GRANTED &&
-          result['android.permission.WRITE_EXTERNAL_STORAGE'] === PermissionsAndroid.RESULTS.GRANTED
-        );
-
-        // If permissions were denied, show settings dialog
-        if (!isGranted) {
-          Alert.alert(
-            '需要权限',
-            '请在设置中授予存储权限以继续使用此功能',
-            [
-              { text: '取消', style: 'cancel' },
-              { text: '去设置', onPress: openSettings }
-            ]
-          );
-          return false;
-        }
-
-        return isGranted;
+      // Request battery optimization first
+      try {
+        await NativeModules.PowerManagerModule.requestIgnoreBatteryOptimizations('com.rnmonitorapp');
+      } catch (error) {
+        console.warn('Battery optimization request failed:', error);
       }
 
-      return true; // Both permissions are already granted
+      const androidVersion = typeof Platform.Version === 'string'
+        ? parseInt(Platform.Version, 10)
+        : Platform.Version;
+
+      // Request notification permission for Android 13+
+      if (androidVersion >= 33) {
+        try {
+          const notificationPermission = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+            {
+              title: "通知权限",
+              message: "需要通知权限以显示文件监控状态",
+              buttonNeutral: "稍后询问",
+              buttonNegative: "取消",
+              buttonPositive: "确定"
+            }
+          );
+          if (notificationPermission !== PermissionsAndroid.RESULTS.GRANTED) {
+            console.warn('Notification permission denied');
+          }
+        } catch (error) {
+          console.warn('Notification permission request failed:', error);
+        }
+      }
+
+      // For Android 11+, request MANAGE_EXTERNAL_STORAGE
+      if (androidVersion >= 30) {
+        try {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.MANAGE_EXTERNAL_STORAGE,
+            {
+              title: "文件访问权限",
+              message: "需要完整的存储访问权限以监控PDF文件",
+              buttonNeutral: "稍后询问",
+              buttonNegative: "取消",
+              buttonPositive: "确定"
+            }
+          );
+
+          if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+            Alert.alert(
+              '需要权限',
+              '请在设置中授予完整的存储访问权限以继续使用此功能',
+              [
+                { text: '取消', style: 'cancel' },
+                {
+                  text: '去设置',
+                  onPress: async () => {
+                    try {
+                      await Linking.openSettings();
+                    } catch (error) {
+                      console.error('Error opening settings:', error);
+                    }
+                  }
+                }
+              ]
+            );
+            return false;
+          }
+          return true;
+        } catch (error) {
+          console.error('Storage permission request failed:', error);
+          return false;
+        }
+      } else {
+        // For Android < 11, request legacy storage permissions
+        try {
+          const results = await PermissionsAndroid.requestMultiple([
+            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+          ]);
+
+          const isGranted = Object.values(results).every(
+            permission => permission === PermissionsAndroid.RESULTS.GRANTED
+          );
+
+          if (!isGranted) {
+            Alert.alert(
+              '需要权限',
+              '请在设置中授予存储权限以继续使用此功能',
+              [
+                { text: '取消', style: 'cancel' },
+                {
+                  text: '去设置',
+                  onPress: async () => {
+                    try {
+                      await Linking.openSettings();
+                    } catch (error) {
+                      console.error('Error opening settings:', error);
+                    }
+                  }
+                }
+              ]
+            );
+            return false;
+          }
+          return isGranted;
+        } catch (error) {
+          console.error('Legacy storage permission request failed:', error);
+          return false;
+        }
+      }
     } catch (err) {
-      console.warn(err);
+      console.error('Permission request error:', err);
       return false;
     }
   };

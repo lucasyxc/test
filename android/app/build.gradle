@@ -90,10 +90,10 @@ android {
             keyPassword 'android'
         }
         release {
-            storeFile file('release.keystore')
-            storePassword 'rnmonitor123'
-            keyAlias 'rnmonitorapp'
-            keyPassword 'rnmonitor123'
+            storeFile file('my-release-key.keystore')
+            storePassword 'android'
+            keyAlias 'my-key-alias'
+            keyPassword 'android'
         }
     }
     buildTypes {
