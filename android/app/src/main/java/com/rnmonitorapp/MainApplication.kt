@@ -12,7 +12,6 @@ import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.flipper.ReactNativeFlipper
 import com.facebook.soloader.SoLoader
 import com.google.firebase.FirebaseApp
-import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage
 
 class MainApplication : Application(), ReactApplication {
 
@@ -22,7 +21,6 @@ class MainApplication : Application(), ReactApplication {
           val packages = PackageList(this).packages.toMutableList()
           packages.add(PDFMonitorPackage())
           packages.add(PowerManagerPackage())
-          packages.add(ReactNativePushNotificationPackage())
           return packages
         }
 
