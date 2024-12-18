@@ -20,7 +20,7 @@ interface FSEvent {
   type: string;
 }
 
-const WelcomeComponent: React.FC<WelcomeComponentProps> = ({ organizationName }) => {
+const WelcomeComponent: React.FC<WelcomeComponentProps> = ({ organizationName, onLogout }) => {
   const [isMonitoring, setIsMonitoring] = useState(false);
   const DOWNLOAD_PATH = '/storage/emulated/0/Download';
   const watcherRef = useRef<NodeJS.Timeout | null>(null);
@@ -157,6 +157,9 @@ const WelcomeComponent: React.FC<WelcomeComponentProps> = ({ organizationName })
           {isMonitoring ? '监听中...' : '开始监听'}
         </Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.logoutButton} onPress={onLogout}>
+        <Text style={styles.logoutButtonText}>退出登录</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -182,6 +185,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#666',
   },
   startButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  logoutButton: {
+    backgroundColor: '#dc3545',
+    paddingHorizontal: 30,
+    paddingVertical: 15,
+    borderRadius: 8,
+    marginTop: 20,
+  },
+  logoutButtonText: {
     color: '#fff',
     fontSize: 18,
     fontWeight: '600',
