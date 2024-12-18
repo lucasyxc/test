@@ -11,7 +11,6 @@ import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.flipper.ReactNativeFlipper
 import com.facebook.soloader.SoLoader
-import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage
 
 class MainApplication : Application(), ReactApplication {
 
@@ -20,7 +19,6 @@ class MainApplication : Application(), ReactApplication {
         override fun getPackages(): List<ReactPackage> {
           val packages = PackageList(this).packages
           packages.add(PowerManagerPackage())
-          packages.add(ReactNativePushNotificationPackage())
           return packages
         }
 
