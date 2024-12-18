@@ -3189,7 +3189,8 @@ androidx.core.app.RemoteActionCompat:
     public void setShouldShowIcon(boolean)
     public boolean shouldShowIcon()
     public android.app.RemoteAction toRemoteAction()
-androidx.core.app.RemoteInput$Api16Impl
+androidx.core.app.RemoteInput$Api16Impl:
+    private void <init>()
 androidx.core.app.RemoteInput$Api20Impl:
     private void <init>()
     static androidx.core.app.RemoteInput fromPlatform(java.lang.Object)
@@ -3220,10 +3221,8 @@ androidx.core.app.RemoteInput:
     public static void addDataResultToIntent(androidx.core.app.RemoteInput,android.content.Intent,java.util.Map)
     public static void addResultsToIntent(androidx.core.app.RemoteInput[],android.content.Intent,android.os.Bundle)
     static androidx.core.app.RemoteInput fromPlatform(android.app.RemoteInput)
-    private static android.content.Intent getClipDataIntentFromIntent(android.content.Intent)
     public static java.util.Map getDataResultsFromIntent(android.content.Intent,java.lang.String)
     private static java.lang.String getExtraResultsKeyForData(java.lang.String)
-    public static android.os.Bundle getResultsFromIntent(android.content.Intent)
     public static int getResultsSource(android.content.Intent)
     public static void setResultsSource(android.content.Intent,int)
 androidx.core.app.ServiceCompat$Api24Impl
@@ -7048,11 +7047,6 @@ com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage:
     public java.util.List createJSModules()
 com.dieam.reactnativepushnotification.helpers.ApplicationBadgeHelper:
     private static final java.lang.String LOG_TAG
-com.dieam.reactnativepushnotification.modules.RNPushNotificationActions$1$1
-com.dieam.reactnativepushnotification.modules.RNPushNotificationActions$1
-com.dieam.reactnativepushnotification.modules.RNPushNotificationActions:
-    public void <init>()
-    public void onReceive(android.content.Context,android.content.Intent)
 com.dieam.reactnativepushnotification.modules.RNPushNotificationAttributes:
     private static final java.lang.String ACTIONS
     private static final java.lang.String ALLOW_WHILE_IDLE
@@ -7093,8 +7087,6 @@ com.dieam.reactnativepushnotification.modules.RNPushNotificationAttributes:
     private static final java.lang.String VIBRATE
     private static final java.lang.String VIBRATION
     private static final java.lang.String WHEN
-    public android.os.Bundle toBundle()
-com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver
 com.dieam.reactnativepushnotification.modules.RNPushNotificationConfig:
     private static final java.lang.String KEY_NOTIFICATION_COLOR
     private static final java.lang.String KEY_NOTIFICATION_DEFAULT_CHANNEL_ID
@@ -7105,16 +7097,12 @@ com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper:
     private static final long DEFAULT_VIBRATION
     public static final java.lang.String PREFERENCES_KEY
 com.dieam.reactnativepushnotification.modules.RNPushNotificationJsDelivery:
-    void notifyNotificationAction(android.os.Bundle)
     void notifyRemoteFetch(android.os.Bundle)
 com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService$1$1
 com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService$1
 com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService
 com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher:
     static final java.lang.String NOTIFICATION_ID
-    public void <init>()
-    private void handleLocalNotification(android.content.Context,android.os.Bundle)
-    public void onReceive(android.content.Context,android.content.Intent)
 com.dieam.reactnativepushnotification.modules.RNReceivedMessageHandler$1$1
 com.dieam.reactnativepushnotification.modules.RNReceivedMessageHandler$1
 com.dieam.reactnativepushnotification.modules.RNReceivedMessageHandler
@@ -9438,7 +9426,6 @@ com.facebook.react.ReactInstanceManager:
     public com.facebook.react.common.LifecycleState getLifecycleState()
     public com.facebook.react.MemoryPressureRouter getMemoryPressureRouter()
     public java.util.List getPackages()
-    public boolean hasStartedCreatingInitialContext()
     private void logOnDestroy()
     private void onReloadWithJSDebugger(com.facebook.react.bridge.JavaJSExecutor$Factory)
     public void recreateReactContextInBackground()
@@ -25432,6 +25419,9 @@ androidx.core.app.NotificationCompatJellybean:
     public static android.os.Bundle getExtras(android.app.Notification)
     public static android.os.Bundle writeActionAndGetExtras(android.app.Notification$Builder,androidx.core.app.NotificationCompat$Action)
 androidx.core.app.Person
+androidx.core.app.RemoteInput$Api16Impl
+androidx.core.app.RemoteInput:
+    private static android.content.Intent getClipDataIntentFromIntent(android.content.Intent)
 androidx.core.app.SharedElementCallback:
     public abstract void onMapSharedElements(java.util.List,java.util.Map)
     public abstract void onSharedElementEnd(java.util.List,java.util.List,java.util.List)

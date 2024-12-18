@@ -3,8 +3,8 @@
 # min_api: 21
 # common_typos_disable
 # {"id":"com.android.tools.r8.mapping","version":"2.2"}
-# pg_map_id: c94131c
-# pg_map_hash: SHA-256 c94131c99c20287a0de39144d3ea26d61c4b09d67dbb56bceeba17c30e91d054
+# pg_map_id: 11783c4
+# pg_map_hash: SHA-256 11783c4a4516a1fffe8a5b8a74ea450298d24b60755583771f685e7d95cf0e20
 androidx.activity.Cancellable -> androidx.activity.a:
 androidx.activity.ComponentActivity -> androidx.activity.ComponentActivity:
     java.util.concurrent.CopyOnWriteArrayList mOnMultiWindowModeChangedListeners -> A
@@ -6310,7 +6310,8 @@ androidx.core.app.RemoteInput -> androidx.core.app.l0:
     1:1:android.os.Bundle getExtras():0:0 -> g
     1:1:java.lang.CharSequence getLabel():0:0 -> h
     1:1:java.lang.String getResultKey():0:0 -> i
-    1:1:boolean isDataOnly():0:0 -> j
+    1:1:android.os.Bundle getResultsFromIntent(android.content.Intent):0:0 -> j
+    1:1:boolean isDataOnly():0:0 -> k
 androidx.core.app.RemoteInput$Api20Impl -> androidx.core.app.l0$a:
     1:1:void addResultsToIntent(java.lang.Object,android.content.Intent,android.os.Bundle):0:0 -> a
     1:1:android.app.RemoteInput fromCompat(androidx.core.app.RemoteInput):0:0 -> b
@@ -13328,8 +13329,15 @@ com.dieam.reactnativepushnotification.modules.RNPushNotification$1 -> com.dieam.
     com.dieam.reactnativepushnotification.modules.RNPushNotification this$0 -> b
     1:1:void onComplete(com.google.android.gms.tasks.Task):0:0 -> a
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Lz5/i;)V"}
-com.dieam.reactnativepushnotification.modules.RNPushNotificationActions -> l0.a:
-com.dieam.reactnativepushnotification.modules.RNPushNotificationAttributes -> l0.b:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationActions$1 -> com.dieam.reactnativepushnotification.modules.RNPushNotificationActions$a:
+    android.content.Context val$context -> m
+    android.os.Bundle val$bundle -> n
+    com.dieam.reactnativepushnotification.modules.RNPushNotificationActions this$0 -> o
+com.dieam.reactnativepushnotification.modules.RNPushNotificationActions$1$1 -> com.dieam.reactnativepushnotification.modules.RNPushNotificationActions$a$a:
+    com.facebook.react.ReactInstanceManager val$mReactInstanceManager -> a
+    com.dieam.reactnativepushnotification.modules.RNPushNotificationActions$1 this$1 -> b
+    1:1:void onReactContextInitialized(com.facebook.react.bridge.ReactContext):0:0 -> a
+com.dieam.reactnativepushnotification.modules.RNPushNotificationAttributes -> l0.a:
     java.lang.String tag -> A
     java.lang.String repeatType -> B
     double repeatTime -> C
@@ -13372,7 +13380,7 @@ com.dieam.reactnativepushnotification.modules.RNPushNotificationAttributes -> l0
     1:1:void <init>(android.os.Bundle):0:0 -> <init>
     2:2:void <init>(org.json.JSONObject):0:0 -> <init>
     1:1:com.dieam.reactnativepushnotification.modules.RNPushNotificationAttributes fromJson(java.lang.String):0:0 -> a
-      # {"id":"com.android.tools.r8.residualsignature","signature":"(Ljava/lang/String;)Ll0/b;"}
+      # {"id":"com.android.tools.r8.residualsignature","signature":"(Ljava/lang/String;)Ll0/a;"}
     1:1:double getFireDate():0:0 -> b
     1:1:java.lang.String getId():0:0 -> c
     1:1:java.lang.String getMessage():0:0 -> d
@@ -13381,16 +13389,17 @@ com.dieam.reactnativepushnotification.modules.RNPushNotificationAttributes -> l0
     1:1:java.lang.String getSound():0:0 -> g
     1:1:java.lang.String getTitle():0:0 -> h
     1:1:java.lang.String getUserInfo():0:0 -> i
-    1:1:org.json.JSONObject toJson():0:0 -> j
+    1:1:android.os.Bundle toBundle():0:0 -> j
+    1:1:org.json.JSONObject toJson():0:0 -> k
     1:1:java.lang.String toString():0:0 -> toString
-com.dieam.reactnativepushnotification.modules.RNPushNotificationConfig -> l0.c:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationConfig -> l0.b:
     android.content.Context context -> a
     android.os.Bundle metadata -> b
     1:1:void <init>(android.content.Context):0:0 -> <init>
     1:1:int getNotificationColor():0:0 -> a
     1:1:java.lang.String getNotificationDefaultChannelId():0:0 -> b
     1:1:java.lang.String getStringValue(java.lang.String,java.lang.String):0:0 -> c
-com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper -> l0.u:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper -> l0.t:
     android.content.Context context -> a
     com.dieam.reactnativepushnotification.modules.RNPushNotificationConfig config -> b
     android.content.SharedPreferences scheduledNotificationsPersistence -> c
@@ -13421,111 +13430,112 @@ com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper -> l0.u:
     1:1:void sendToNotificationCentre(android.os.Bundle):0:0 -> x
     1:1:void sendToNotificationCentreWithPicture(android.os.Bundle,android.graphics.Bitmap,android.graphics.Bitmap,android.graphics.Bitmap):0:0 -> y
     1:1:android.app.PendingIntent toScheduleNotificationIntent(android.os.Bundle):0:0 -> z
-com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline0 -> l0.d:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline0 -> l0.c:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:1:android.app.NotificationChannel com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$InternalSyntheticApiModelOutline$1$1f6d2b93c91bb0a3d9133970d0a26cfda07d42aa333876ca0002fbf76870a32f$0.m(android.app.NotificationManager,java.lang.String):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline1 -> l0.l:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline1 -> l0.k:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:1:android.service.notification.StatusBarNotification[] com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$InternalSyntheticApiModelOutline$1$210bd7893545c1bbcea484db3997e574825683118491a49e863db0f305d586b2$0.m(android.app.NotificationManager):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline10 -> l0.e:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline10 -> l0.d:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:1:void com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$InternalSyntheticApiModelOutline$1$720a2c52b404326dd3a2e015256b6c5a0d3c322f86b378b0dc7aaeca4ff2dcd1$4.m(android.app.NotificationChannel,boolean):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline11 -> l0.f:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline11 -> l0.e:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:1:void com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$InternalSyntheticApiModelOutline$1$720a2c52b404326dd3a2e015256b6c5a0d3c322f86b378b0dc7aaeca4ff2dcd1$5.m(android.app.NotificationChannel,boolean):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline12 -> l0.g:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline12 -> l0.f:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:1:void com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$InternalSyntheticApiModelOutline$1$720a2c52b404326dd3a2e015256b6c5a0d3c322f86b378b0dc7aaeca4ff2dcd1$6.m(android.app.NotificationChannel,long[]):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline13 -> l0.h:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline13 -> l0.g:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:1:void com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$InternalSyntheticApiModelOutline$1$720a2c52b404326dd3a2e015256b6c5a0d3c322f86b378b0dc7aaeca4ff2dcd1$7.m(android.app.NotificationChannel,android.net.Uri,android.media.AudioAttributes):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline14 -> l0.i:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline14 -> l0.h:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:1:void com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$InternalSyntheticApiModelOutline$1$720a2c52b404326dd3a2e015256b6c5a0d3c322f86b378b0dc7aaeca4ff2dcd1$9.m(android.app.NotificationManager,android.app.NotificationChannel):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline15 -> l0.j:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline15 -> l0.i:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:1:int com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$InternalSyntheticApiModelOutline$1$dd4ededf626356e92b95f03a253a192b6fd929c3833c4abf64a6b3bf3252e827$1.m(android.app.NotificationChannel):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline16 -> l0.k:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline16 -> l0.j:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:1:android.app.NotificationChannel com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$InternalSyntheticApiModelOutline$12$720a2c52b404326dd3a2e015256b6c5a0d3c322f86b378b0dc7aaeca4ff2dcd1$0.m(java.lang.String,java.lang.CharSequence,int):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline2 -> l0.m:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline2 -> l0.l:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:1:void com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$InternalSyntheticApiModelOutline$1$286f23b5293f8d09278ec5b70aa1b74e55962fb5537a1a61a9e73327938f86ca$0.m(android.app.NotificationManager,java.lang.String):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline3 -> l0.n:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline3 -> l0.m:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:1:java.util.List com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$InternalSyntheticApiModelOutline$1$4b657e40791aa7ab5b7a9805116138bb96a2152a26fa3d7856a20c7a4af3b593$0.m(android.app.NotificationManager):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline4 -> l0.o:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline4 -> l0.n:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:1:android.app.NotificationChannel com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$InternalSyntheticApiModelOutline$1$4b657e40791aa7ab5b7a9805116138bb96a2152a26fa3d7856a20c7a4af3b593$1.m(java.lang.Object):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline5 -> l0.p:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline5 -> l0.o:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:1:java.lang.String com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$InternalSyntheticApiModelOutline$1$4b657e40791aa7ab5b7a9805116138bb96a2152a26fa3d7856a20c7a4af3b593$2.m(android.app.NotificationChannel):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline6 -> l0.q:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline6 -> l0.p:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:1:void com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$InternalSyntheticApiModelOutline$1$6497fc4d23d903111e765af7bc6760aac28f9eca52e8e27184018a9faa373712$0.m(android.app.AlarmManager,int,long,android.app.PendingIntent):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline7 -> l0.r:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline7 -> l0.q:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:1:java.lang.CharSequence com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$InternalSyntheticApiModelOutline$1$720a2c52b404326dd3a2e015256b6c5a0d3c322f86b378b0dc7aaeca4ff2dcd1$1.m(android.app.NotificationChannel):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline8 -> l0.s:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline8 -> l0.r:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:1:java.lang.String com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$InternalSyntheticApiModelOutline$1$720a2c52b404326dd3a2e015256b6c5a0d3c322f86b378b0dc7aaeca4ff2dcd1$2.m(android.app.NotificationChannel):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline9 -> l0.t:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$ExternalSyntheticApiModelOutline9 -> l0.s:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:1:void com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$$InternalSyntheticApiModelOutline$1$720a2c52b404326dd3a2e015256b6c5a0d3c322f86b378b0dc7aaeca4ff2dcd1$3.m(android.app.NotificationChannel,java.lang.String):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$1 -> l0.u$a:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper$1 -> l0.t$a:
     android.os.Bundle val$bundle -> a
     com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper this$0 -> b
     1:1:void <init>(com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper,android.os.Bundle):0:0 -> <init>
-      # {"id":"com.android.tools.r8.residualsignature","signature":"(Ll0/u;Landroid/os/Bundle;)V"}
+      # {"id":"com.android.tools.r8.residualsignature","signature":"(Ll0/t;Landroid/os/Bundle;)V"}
     1:1:void call(android.graphics.Bitmap,android.graphics.Bitmap,android.graphics.Bitmap):0:0 -> a
 com.dieam.reactnativepushnotification.modules.RNPushNotificationJsDelivery -> com.dieam.reactnativepushnotification.modules.a:
     com.facebook.react.bridge.ReactContext mReactContext -> a
     1:1:java.lang.String convertJSON(android.os.Bundle):0:0 -> a
     1:1:org.json.JSONObject convertJSONObject(android.os.Bundle):0:0 -> b
     1:1:void notifyNotification(android.os.Bundle):0:0 -> c
-    1:1:void sendEvent(java.lang.String,java.lang.Object):0:0 -> d
-com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator -> l0.v:
+    1:1:void notifyNotificationAction(android.os.Bundle):0:0 -> d
+    1:1:void sendEvent(java.lang.String,java.lang.Object):0:0 -> e
+com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator -> l0.u:
     java.util.concurrent.atomic.AtomicInteger count -> a
     android.graphics.Bitmap largeIconImage -> b
     android.graphics.Bitmap bigPictureImage -> c
     android.graphics.Bitmap bigLargeIconImage -> d
     com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator$Callback callback -> e
     1:1:void <init>(com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator$Callback):0:0 -> <init>
-      # {"id":"com.android.tools.r8.residualsignature","signature":"(Ll0/v$d;)V"}
+      # {"id":"com.android.tools.r8.residualsignature","signature":"(Ll0/u$d;)V"}
     1:1:void downloadRequest(android.content.Context,android.net.Uri,com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber):0:0 -> a
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Landroid/content/Context;Landroid/net/Uri;Le2/b;)V"}
     1:1:void finished():0:0 -> b
@@ -13535,33 +13545,34 @@ com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregat
     1:1:void setBigPictureUrl(android.content.Context,java.lang.String):0:0 -> f
     1:1:void setLargeIcon(android.graphics.Bitmap):0:0 -> g
     1:1:void setLargeIconUrl(android.content.Context,java.lang.String):0:0 -> h
-com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator$1 -> l0.v$a:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator$1 -> l0.u$a:
     com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator val$aggregator -> a
     com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator this$0 -> b
     1:1:void <init>(com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator,com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator):0:0 -> <init>
-      # {"id":"com.android.tools.r8.residualsignature","signature":"(Ll0/v;Ll0/v;)V"}
+      # {"id":"com.android.tools.r8.residualsignature","signature":"(Ll0/u;Ll0/u;)V"}
     1:1:void onFailureImpl(com.facebook.datasource.DataSource):0:0 -> e
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Ld1/c;)V"}
     1:1:void onNewResultImpl(android.graphics.Bitmap):0:0 -> g
-com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator$2 -> l0.v$b:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator$2 -> l0.u$b:
     com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator val$aggregator -> a
     com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator this$0 -> b
     1:1:void <init>(com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator,com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator):0:0 -> <init>
-      # {"id":"com.android.tools.r8.residualsignature","signature":"(Ll0/v;Ll0/v;)V"}
+      # {"id":"com.android.tools.r8.residualsignature","signature":"(Ll0/u;Ll0/u;)V"}
     1:1:void onFailureImpl(com.facebook.datasource.DataSource):0:0 -> e
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Ld1/c;)V"}
     1:1:void onNewResultImpl(android.graphics.Bitmap):0:0 -> g
-com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator$3 -> l0.v$c:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator$3 -> l0.u$c:
     com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator val$aggregator -> a
     com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator this$0 -> b
     1:1:void <init>(com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator,com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator):0:0 -> <init>
-      # {"id":"com.android.tools.r8.residualsignature","signature":"(Ll0/v;Ll0/v;)V"}
+      # {"id":"com.android.tools.r8.residualsignature","signature":"(Ll0/u;Ll0/u;)V"}
     1:1:void onFailureImpl(com.facebook.datasource.DataSource):0:0 -> e
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Ld1/c;)V"}
     1:1:void onNewResultImpl(android.graphics.Bitmap):0:0 -> g
-com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator$Callback -> l0.v$d:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationPicturesAggregator$Callback -> l0.u$d:
     void call(android.graphics.Bitmap,android.graphics.Bitmap,android.graphics.Bitmap) -> a
-com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher -> l0.w:
+com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher -> com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher:
+    1:1:void handleLocalNotification(android.content.Context,android.os.Bundle):0:0 -> a
 com.facebook.binaryresource.BinaryResource -> m0.a:
     java.io.InputStream openStream() -> a
     long size() -> size
@@ -23456,85 +23467,86 @@ com.facebook.react.ReactInstanceManager -> com.facebook.react.e0:
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Landroid/content/Context;Landroid/app/Activity;Lcom/facebook/react/modules/core/b;Lcom/facebook/react/bridge/JavaScriptExecutorFactory;Lcom/facebook/react/bridge/JSBundleLoader;Ljava/lang/String;Ljava/util/List;ZLb3/e;ZLcom/facebook/react/bridge/NotThreadSafeBridgeIdleDebugListener;Lcom/facebook/react/common/LifecycleState;Lcom/facebook/react/bridge/JSExceptionHandler;Lc3/f;ZLc3/a;IILcom/facebook/react/bridge/JSIModulePackage;Ljava/util/Map;Lcom/facebook/react/n0$a;Lx2/h;Lc3/b;)V"}
     1:1:java.util.Collection getViewManagerNames():0:0 -> A
     1:1:void handleCxxError(java.lang.Exception):0:0 -> B
-    1:1:void initializeSoLoaderIfNecessary(android.content.Context):0:0 -> C
-    1:1:void invokeDefaultOnBackPressed():0:0 -> D
-    1:1:void lambda$attachRootViewToInstance$6(int,com.facebook.react.uimanager.ReactRoot):0:0 -> E
+    1:1:boolean hasStartedCreatingInitialContext():0:0 -> C
+    1:1:void initializeSoLoaderIfNecessary(android.content.Context):0:0 -> D
+    1:1:void invokeDefaultOnBackPressed():0:0 -> E
+    1:1:void lambda$attachRootViewToInstance$6(int,com.facebook.react.uimanager.ReactRoot):0:0 -> F
       # {"id":"com.android.tools.r8.residualsignature","signature":"(ILcom/facebook/react/uimanager/j0;)V"}
-    1:1:void lambda$runCreateReactContextOnNewThread$0():0:0 -> F
-    1:1:void lambda$runCreateReactContextOnNewThread$1(com.facebook.react.bridge.ReactApplicationContext):0:0 -> G
-    1:1:void lambda$runCreateReactContextOnNewThread$2(com.facebook.react.ReactInstanceManager$ReactContextInitParams):0:0 -> H
+    1:1:void lambda$runCreateReactContextOnNewThread$0():0:0 -> G
+    1:1:void lambda$runCreateReactContextOnNewThread$1(com.facebook.react.bridge.ReactApplicationContext):0:0 -> H
+    1:1:void lambda$runCreateReactContextOnNewThread$2(com.facebook.react.ReactInstanceManager$ReactContextInitParams):0:0 -> I
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/facebook/react/e0$d;)V"}
-    1:1:void lambda$setupReactContext$3(com.facebook.react.ReactInstanceEventListener[],com.facebook.react.bridge.ReactApplicationContext):0:0 -> I
+    1:1:void lambda$setupReactContext$3(com.facebook.react.ReactInstanceEventListener[],com.facebook.react.bridge.ReactApplicationContext):0:0 -> J
       # {"id":"com.android.tools.r8.residualsignature","signature":"([Lcom/facebook/react/v;Lcom/facebook/react/bridge/ReactApplicationContext;)V"}
-    1:1:void lambda$setupReactContext$4():0:0 -> J
-    1:1:void lambda$setupReactContext$5():0:0 -> K
-    1:1:void moveReactContextToCurrentLifecycleState():0:0 -> L
-    1:1:void moveToBeforeCreateLifecycleState():0:0 -> M
-    1:1:void moveToBeforeResumeLifecycleState():0:0 -> N
-    1:1:void moveToResumedLifecycleState(boolean):0:0 -> O
-    1:1:void onActivityResult(android.app.Activity,int,int,android.content.Intent):0:0 -> P
-    1:1:void onBackPressed():0:0 -> Q
-    1:1:void onConfigurationChanged(android.content.Context,android.content.res.Configuration):0:0 -> R
-    1:1:void onHostDestroy():0:0 -> S
-    1:1:void onHostDestroy(android.app.Activity):0:0 -> T
-    1:1:void onHostPause():0:0 -> U
-    1:1:void onHostPause(android.app.Activity):0:0 -> V
-    1:1:void onHostResume(android.app.Activity):0:0 -> W
-    1:1:void onHostResume(android.app.Activity,com.facebook.react.modules.core.DefaultHardwareBackBtnHandler):0:0 -> X
+    1:1:void lambda$setupReactContext$4():0:0 -> K
+    1:1:void lambda$setupReactContext$5():0:0 -> L
+    1:1:void moveReactContextToCurrentLifecycleState():0:0 -> M
+    1:1:void moveToBeforeCreateLifecycleState():0:0 -> N
+    1:1:void moveToBeforeResumeLifecycleState():0:0 -> O
+    1:1:void moveToResumedLifecycleState(boolean):0:0 -> P
+    1:1:void onActivityResult(android.app.Activity,int,int,android.content.Intent):0:0 -> Q
+    1:1:void onBackPressed():0:0 -> R
+    1:1:void onConfigurationChanged(android.content.Context,android.content.res.Configuration):0:0 -> S
+    1:1:void onHostDestroy():0:0 -> T
+    1:1:void onHostDestroy(android.app.Activity):0:0 -> U
+    1:1:void onHostPause():0:0 -> V
+    1:1:void onHostPause(android.app.Activity):0:0 -> W
+    1:1:void onHostResume(android.app.Activity):0:0 -> X
+    1:1:void onHostResume(android.app.Activity,com.facebook.react.modules.core.DefaultHardwareBackBtnHandler):0:0 -> Y
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Landroid/app/Activity;Lcom/facebook/react/modules/core/b;)V"}
-    1:1:void onJSBundleLoadedFromServer():0:0 -> Y
-    1:1:void onNewIntent(android.content.Intent):0:0 -> Z
+    1:1:void onJSBundleLoadedFromServer():0:0 -> Z
     1:1:void $r8$lambda$41ZuLQXs5v18zcrVPAvX5MYDYJQ():0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-    1:1:void onWindowFocusChange(boolean):0:0 -> a0
+    1:1:void onNewIntent(android.content.Intent):0:0 -> a0
     1:1:void $r8$lambda$AwGS8CysOZmWJw3kRVARHQvw9Ew(com.facebook.react.ReactInstanceManager,com.facebook.react.ReactInstanceManager$ReactContextInitParams):0:0 -> b
       # {"id":"com.android.tools.r8.synthesized"}
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/facebook/react/e0;Lcom/facebook/react/e0$d;)V"}
-    1:1:void processPackage(com.facebook.react.ReactPackage,com.facebook.react.NativeModuleRegistryBuilder):0:0 -> b0
-      # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/facebook/react/i0;Lcom/facebook/react/i;)V"}
+    1:1:void onWindowFocusChange(boolean):0:0 -> b0
     1:1:void $r8$lambda$FD-H2RG7CdgXPtYJUBikxLbd8MA(com.facebook.react.ReactInstanceManager,com.facebook.react.bridge.ReactApplicationContext):0:0 -> c
       # {"id":"com.android.tools.r8.synthesized"}
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/facebook/react/e0;Lcom/facebook/react/bridge/ReactApplicationContext;)V"}
-    1:1:com.facebook.react.bridge.NativeModuleRegistry processPackages(com.facebook.react.bridge.ReactApplicationContext,java.util.List,boolean):0:0 -> c0
+    1:1:void processPackage(com.facebook.react.ReactPackage,com.facebook.react.NativeModuleRegistryBuilder):0:0 -> c0
+      # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/facebook/react/i0;Lcom/facebook/react/i;)V"}
     1:1:void $r8$lambda$IGBPr5JAmBJicP8BoE9nuzM5B-I():0:0 -> d
       # {"id":"com.android.tools.r8.synthesized"}
-    1:1:void recreateReactContextInBackground(com.facebook.react.bridge.JavaScriptExecutorFactory,com.facebook.react.bridge.JSBundleLoader):0:0 -> d0
+    1:1:com.facebook.react.bridge.NativeModuleRegistry processPackages(com.facebook.react.bridge.ReactApplicationContext,java.util.List,boolean):0:0 -> d0
     1:1:void $r8$lambda$X6B73vCjcho8fAAIzKYp2uKECBk(com.facebook.react.ReactInstanceManager):0:0 -> e
       # {"id":"com.android.tools.r8.synthesized"}
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/facebook/react/e0;)V"}
-    1:1:void recreateReactContextInBackgroundFromBundleLoader():0:0 -> e0
+    1:1:void recreateReactContextInBackground(com.facebook.react.bridge.JavaScriptExecutorFactory,com.facebook.react.bridge.JSBundleLoader):0:0 -> e0
     1:1:void $r8$lambda$ZmASVTQ9BinphwVRoMzDG1FVKks(com.facebook.react.ReactInstanceManager):0:0 -> f
       # {"id":"com.android.tools.r8.synthesized"}
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/facebook/react/e0;)V"}
-    1:1:void recreateReactContextInBackgroundInner():0:0 -> f0
+    1:1:void recreateReactContextInBackgroundFromBundleLoader():0:0 -> f0
     1:1:void $r8$lambda$iHpnDjhPTftdZc2HP9iD9hTDvL4(com.facebook.react.ReactInstanceManager,com.facebook.react.ReactInstanceEventListener[],com.facebook.react.bridge.ReactApplicationContext):0:0 -> g
       # {"id":"com.android.tools.r8.synthesized"}
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/facebook/react/e0;[Lcom/facebook/react/v;Lcom/facebook/react/bridge/ReactApplicationContext;)V"}
-    1:1:void registerCxxErrorHandlerFunc():0:0 -> g0
+    1:1:void recreateReactContextInBackgroundInner():0:0 -> g0
     1:1:void $r8$lambda$j9GtIg-rsehpFDMj8Aow6z6zzRw(int,com.facebook.react.uimanager.ReactRoot):0:0 -> h
       # {"id":"com.android.tools.r8.synthesized"}
       # {"id":"com.android.tools.r8.residualsignature","signature":"(ILcom/facebook/react/uimanager/j0;)V"}
-    1:1:void removeReactInstanceEventListener(com.facebook.react.ReactInstanceEventListener):0:0 -> h0
-      # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/facebook/react/v;)V"}
+    1:1:void registerCxxErrorHandlerFunc():0:0 -> h0
     1:1:com.facebook.react.devsupport.interfaces.DevSupportManager -$$Nest$fgetmDevSupportManager(com.facebook.react.ReactInstanceManager):0:0 -> i
       # {"id":"com.android.tools.r8.synthesized"}
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/facebook/react/e0;)Lc3/d;"}
-    1:1:void runCreateReactContextOnNewThread(com.facebook.react.ReactInstanceManager$ReactContextInitParams):0:0 -> i0
-      # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/facebook/react/e0$d;)V"}
+    1:1:void removeReactInstanceEventListener(com.facebook.react.ReactInstanceEventListener):0:0 -> i0
+      # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/facebook/react/v;)V"}
     1:1:boolean -$$Nest$fgetmUseFallbackBundle(com.facebook.react.ReactInstanceManager):0:0 -> j
       # {"id":"com.android.tools.r8.synthesized"}
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/facebook/react/e0;)Z"}
-    1:1:void setupReactContext(com.facebook.react.bridge.ReactApplicationContext):0:0 -> j0
+    1:1:void runCreateReactContextOnNewThread(com.facebook.react.ReactInstanceManager$ReactContextInitParams):0:0 -> j0
+      # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/facebook/react/e0$d;)V"}
     1:1:void -$$Nest$monJSBundleLoadedFromServer(com.facebook.react.ReactInstanceManager):0:0 -> k
       # {"id":"com.android.tools.r8.synthesized"}
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/facebook/react/e0;)V"}
-    1:1:void showDevOptionsDialog():0:0 -> k0
+    1:1:void setupReactContext(com.facebook.react.bridge.ReactApplicationContext):0:0 -> k0
     1:1:void -$$Nest$mrecreateReactContextInBackgroundFromBundleLoader(com.facebook.react.ReactInstanceManager):0:0 -> l
       # {"id":"com.android.tools.r8.synthesized"}
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/facebook/react/e0;)V"}
-    1:1:void tearDownReactContext(com.facebook.react.bridge.ReactContext):0:0 -> l0
+    1:1:void showDevOptionsDialog():0:0 -> l0
     1:1:void addReactInstanceEventListener(com.facebook.react.ReactInstanceEventListener):0:0 -> m
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/facebook/react/v;)V"}
+    1:1:void tearDownReactContext(com.facebook.react.bridge.ReactContext):0:0 -> m0
     1:1:void attachRootView(com.facebook.react.uimanager.ReactRoot):0:0 -> n
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Lcom/facebook/react/uimanager/j0;)V"}
     1:1:void attachRootViewToInstance(com.facebook.react.uimanager.ReactRoot):0:0 -> o
@@ -53232,7 +53244,12 @@ com.rnmonitorapp.PDFMonitorModule$$ExternalSyntheticApiModelOutline0 -> c7.a:
 # {"id":"com.android.tools.r8.synthesized"}
     1:1:android.content.ComponentName com.rnmonitorapp.PDFMonitorModule$$InternalSyntheticApiModelOutline$1$23712fd7a3fe7ef04fb4563be64321af8142c0e7444f99d64aef3ca4b5bb62ee$0.m(com.facebook.react.bridge.ReactApplicationContext,android.content.Intent):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-com.rnmonitorapp.PDFMonitorPackage -> c7.b:
+com.rnmonitorapp.PDFMonitorModule$$ExternalSyntheticApiModelOutline1 -> c7.b:
+# {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
+# {"id":"com.android.tools.r8.synthesized"}
+    1:1:boolean com.rnmonitorapp.PDFMonitorModule$$InternalSyntheticApiModelOutline$1$a5cb65e07ed8d197d4ba2b74dd9fac7f4876b0e50ff2f64eb579a683ba18c859$0.m():0:0 -> a
+      # {"id":"com.android.tools.r8.synthesized"}
+com.rnmonitorapp.PDFMonitorPackage -> c7.c:
     void <init>() -> <init>
     1:1:java.util.List createNativeModules(com.facebook.react.bridge.ReactApplicationContext):0:0 -> e
     1:1:java.util.List createViewManagers(com.facebook.react.bridge.ReactApplicationContext):0:0 -> f
@@ -53245,17 +53262,17 @@ com.rnmonitorapp.PDFMonitorService -> com.rnmonitorapp.PDFMonitorService:
     1:1:android.app.Notification buildNotification():0:0 -> i
     1:1:boolean checkPermissions():0:0 -> j
     1:1:void createNotificationChannel():0:0 -> k
-com.rnmonitorapp.PDFMonitorService$$ExternalSyntheticApiModelOutline0 -> c7.c:
+com.rnmonitorapp.PDFMonitorService$$ExternalSyntheticApiModelOutline0 -> c7.d:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:1:java.lang.Object com.rnmonitorapp.PDFMonitorService$$InternalSyntheticApiModelOutline$1$600881db6a76b124e08a7f676560d060887236741b2602d1f0f4f2dcb665e778$1.m(com.rnmonitorapp.PDFMonitorService,java.lang.Class):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-com.rnmonitorapp.PowerManagerModule$$ExternalSyntheticApiModelOutline0 -> c7.d:
+com.rnmonitorapp.PowerManagerModule$$ExternalSyntheticApiModelOutline0 -> c7.e:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:1:boolean com.rnmonitorapp.PowerManagerModule$$InternalSyntheticApiModelOutline$1$cefbce3e852c00af3ac1e2af86d7a6593f1a915df8f50916e58b6f5740a0127e$0.m(android.os.PowerManager,java.lang.String):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-com.rnmonitorapp.PowerManagerPackage -> c7.e:
+com.rnmonitorapp.PowerManagerPackage -> c7.f:
     void <init>() -> <init>
     1:1:java.util.List createNativeModules(com.facebook.react.bridge.ReactApplicationContext):0:0 -> e
     1:1:java.util.List createViewManagers(com.facebook.react.bridge.ReactApplicationContext):0:0 -> f
