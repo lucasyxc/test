@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Alert,
 } from 'react-native';
+import { AuthService } from '../services/AuthService';
 
 interface LoginComponentProps {
   onLoginSuccess: (organizationId: string, organizationName: string) => void;
@@ -30,10 +31,16 @@ const LoginComponent: React.FC<LoginComponentProps> = ({ onLoginSuccess }) => {
       });
 
       const data = await response.json();
-      Alert.alert('提示', data.message);
 
       if (data.success) {
+        await AuthService.saveCredentials({ username, password });
+        await AuthService.saveOrgData({
+          id: data.organization_id,
+          name: data.organization_name,
+        });
         onLoginSuccess(data.organization_id, data.organization_name);
+      } else {
+        Alert.alert('登录失败', data.message || '用户名或密码错误');
       }
     } catch (error) {
       Alert.alert('错误', '登录请求失败，请检查网络连接');

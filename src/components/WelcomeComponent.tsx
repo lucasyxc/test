@@ -12,6 +12,7 @@ import RNFS from 'react-native-fs';
 
 interface WelcomeComponentProps {
   organizationName: string;
+  onLogout: () => Promise<void>;
 }
 
 interface FSEvent {
