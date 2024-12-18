@@ -159,28 +159,16 @@ const WelcomeComponent: React.FC<WelcomeComponentProps> = ({ organizationName, o
         return;
       }
 
-      const initialFiles = await RNFS.readDir(DOWNLOAD_PATH);
-      let lastKnownFiles = new Set(initialFiles.map(file => file.path));
-
-      watcherRef.current = setInterval(async () => {
-        try {
-          const currentFiles = await RNFS.readDir(DOWNLOAD_PATH);
-          const currentFilePaths = new Set(currentFiles.map(file => file.path));
-
-          for (const file of currentFiles) {
-            if (!lastKnownFiles.has(file.path) && file.path.toLowerCase().endsWith('.pdf')) {
-              checkFileWriteComplete(file.path);
-            }
-          }
-
-          lastKnownFiles = currentFilePaths;
-        } catch (error) {
-          console.error('Error monitoring directory:', error);
-        }
-      }, 1000);
-
-      setIsMonitoring(true);
+      // Start the native PDFMonitorService
+      try {
+        await NativeModules.PDFMonitorService.startService();
+        setIsMonitoring(true);
+      } catch (error) {
+        console.error('Error starting PDFMonitorService:', error);
+        Alert.alert('错误', '无法启动监控服务');
+      }
     } catch (error) {
+      console.error('Error in startMonitoring:', error);
       Alert.alert('错误', '无法开始监听文件夹');
     }
   };
@@ -215,11 +203,15 @@ const WelcomeComponent: React.FC<WelcomeComponentProps> = ({ organizationName, o
 
   useEffect(() => {
     return () => {
-      if (watcherRef.current) {
-        clearInterval(watcherRef.current);
+      if (isMonitoring) {
+        try {
+          NativeModules.PDFMonitorService.stopService();
+        } catch (error) {
+          console.error('Error stopping PDFMonitorService:', error);
+        }
       }
     };
-  }, []);
+  }, [isMonitoring]);
 
   return (
     <View style={styles.container}>
