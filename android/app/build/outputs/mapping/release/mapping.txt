@@ -3,8 +3,8 @@
 # min_api: 21
 # common_typos_disable
 # {"id":"com.android.tools.r8.mapping","version":"2.2"}
-# pg_map_id: 1f05cb6
-# pg_map_hash: SHA-256 1f05cb6e1ccb2d8dc54f8a6c2582188b08327f0d5cc7d46b150b8bbda71c9233
+# pg_map_id: c94131c
+# pg_map_hash: SHA-256 c94131c99c20287a0de39144d3ea26d61c4b09d67dbb56bceeba17c30e91d054
 androidx.activity.Cancellable -> androidx.activity.a:
 androidx.activity.ComponentActivity -> androidx.activity.ComponentActivity:
     java.util.concurrent.CopyOnWriteArrayList mOnMultiWindowModeChangedListeners -> A
@@ -53227,6 +53227,15 @@ com.rnmonitorapp.MainApplication$reactNativeHost$1 -> com.rnmonitorapp.MainAppli
     1:1:boolean getUseDeveloperSupport():0:0 -> q
     1:1:java.lang.Boolean isHermesEnabled():0:0 -> s
     1:1:boolean isNewArchEnabled():0:0 -> t
+com.rnmonitorapp.PDFMonitorModule$$ExternalSyntheticApiModelOutline0 -> c7.a:
+# {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
+# {"id":"com.android.tools.r8.synthesized"}
+    1:1:android.content.ComponentName com.rnmonitorapp.PDFMonitorModule$$InternalSyntheticApiModelOutline$1$23712fd7a3fe7ef04fb4563be64321af8142c0e7444f99d64aef3ca4b5bb62ee$0.m(com.facebook.react.bridge.ReactApplicationContext,android.content.Intent):0:0 -> a
+      # {"id":"com.android.tools.r8.synthesized"}
+com.rnmonitorapp.PDFMonitorPackage -> c7.b:
+    void <init>() -> <init>
+    1:1:java.util.List createNativeModules(com.facebook.react.bridge.ReactApplicationContext):0:0 -> e
+    1:1:java.util.List createViewManagers(com.facebook.react.bridge.ReactApplicationContext):0:0 -> f
 com.rnmonitorapp.PDFMonitorService -> com.rnmonitorapp.PDFMonitorService:
     android.os.PowerManager$WakeLock wakeLock -> o
     long TIMEOUT -> p
@@ -53236,17 +53245,17 @@ com.rnmonitorapp.PDFMonitorService -> com.rnmonitorapp.PDFMonitorService:
     1:1:android.app.Notification buildNotification():0:0 -> i
     1:1:boolean checkPermissions():0:0 -> j
     1:1:void createNotificationChannel():0:0 -> k
-com.rnmonitorapp.PDFMonitorService$$ExternalSyntheticApiModelOutline0 -> c7.a:
+com.rnmonitorapp.PDFMonitorService$$ExternalSyntheticApiModelOutline0 -> c7.c:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:1:java.lang.Object com.rnmonitorapp.PDFMonitorService$$InternalSyntheticApiModelOutline$1$600881db6a76b124e08a7f676560d060887236741b2602d1f0f4f2dcb665e778$1.m(com.rnmonitorapp.PDFMonitorService,java.lang.Class):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-com.rnmonitorapp.PowerManagerModule$$ExternalSyntheticApiModelOutline0 -> c7.b:
+com.rnmonitorapp.PowerManagerModule$$ExternalSyntheticApiModelOutline0 -> c7.d:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
     1:1:boolean com.rnmonitorapp.PowerManagerModule$$InternalSyntheticApiModelOutline$1$cefbce3e852c00af3ac1e2af86d7a6593f1a915df8f50916e58b6f5740a0127e$0.m(android.os.PowerManager,java.lang.String):0:0 -> a
       # {"id":"com.android.tools.r8.synthesized"}
-com.rnmonitorapp.PowerManagerPackage -> c7.c:
+com.rnmonitorapp.PowerManagerPackage -> c7.e:
     void <init>() -> <init>
     1:1:java.util.List createNativeModules(com.facebook.react.bridge.ReactApplicationContext):0:0 -> e
     1:1:java.util.List createViewManagers(com.facebook.react.bridge.ReactApplicationContext):0:0 -> f
