@@ -19,7 +19,7 @@ class PowerManagerModule(reactContext: ReactApplicationContext) : ReactContextBa
     @ReactMethod
     fun requestIgnoreBatteryOptimizations(packageName: String, promise: Promise) {
         try {
-            val pm = reactContext.getSystemService(Context.POWER_SERVICE) as PowerManager
+            val pm = reactApplicationContext.getSystemService(Context.POWER_SERVICE) as PowerManager
             if (pm.isIgnoringBatteryOptimizations(packageName)) {
                 promise.resolve(true)
                 return
@@ -30,7 +30,7 @@ class PowerManagerModule(reactContext: ReactApplicationContext) : ReactContextBa
                 data = Uri.parse("package:$packageName")
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
-            reactContext.startActivity(intent)
+            reactApplicationContext.startActivity(intent)
             promise.resolve(true)
         } catch (e: Exception) {
             promise.reject("ERROR", e.message)
@@ -40,7 +40,7 @@ class PowerManagerModule(reactContext: ReactApplicationContext) : ReactContextBa
     @ReactMethod
     fun isIgnoringBatteryOptimizations(packageName: String, promise: Promise) {
         try {
-            val pm = reactContext.getSystemService(Context.POWER_SERVICE) as PowerManager
+            val pm = reactApplicationContext.getSystemService(Context.POWER_SERVICE) as PowerManager
             promise.resolve(pm.isIgnoringBatteryOptimizations(packageName))
         } catch (e: Exception) {
             promise.reject("ERROR", e.message)
