@@ -141,6 +141,7 @@ const WelcomeComponent: React.FC<WelcomeComponentProps> = ({ organizationName, o
     try {
       const hasPermission = await requestStoragePermission();
       if (!hasPermission) {
+        Alert.alert('错误', '需要存储权限才能监听文件夹');
         return;
       }
 
@@ -150,7 +151,6 @@ const WelcomeComponent: React.FC<WelcomeComponentProps> = ({ organizationName, o
         return;
       }
 
-      // Start periodic monitoring in foreground
       monitorIntervalRef.current = setInterval(async () => {
         try {
           const hasNewPDFs = await monitorPDFFiles();
