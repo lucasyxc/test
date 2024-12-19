@@ -12,13 +12,16 @@ import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.flipper.ReactNativeFlipper
 import com.facebook.soloader.SoLoader
 import com.google.firebase.FirebaseApp
+import com.rnmonitorapp.PDFMonitorPackage
 
 class MainApplication : Application(), ReactApplication {
 
   override val reactNativeHost: ReactNativeHost =
       object : DefaultReactNativeHost(this) {
         override fun getPackages(): List<ReactPackage> {
-          return PackageList(this).packages
+          val packages = PackageList(this).packages.toMutableList()
+          packages.add(PDFMonitorPackage())
+          return packages
         }
 
         override fun getJSMainModuleName(): String = "index"
