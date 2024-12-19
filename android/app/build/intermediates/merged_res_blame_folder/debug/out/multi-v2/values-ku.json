@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.rnmonitorapp-mergeDebugResources-34:/values-ku/values-ku.xml",
+            "map": [
+                {
+                    "source": "/home/ubuntu/.gradle/caches/transforms-3/915c0d95d45e6b96c252f80dc294b0ba/transformed/jetified-react-android-0.73.1-debug/res/values-ku/values-ku.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7",
+                        "startColumns": "4,4,4,4,4,4",
+                        "startOffsets": "55,136,205,288,355,422",
+                        "endColumns": "80,68,82,66,66,72",
+                        "endOffsets": "131,200,283,350,417,490"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,9 +1,8 @@
 package com.rnmonitorapp
 
-import android.content.Intent
-import android.os.Build
 import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Environment
 import android.util.Log
 import androidx.core.content.ContextCompat
@@ -11,11 +10,12 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.Promise
+import com.facebook.react.modules.core.DeviceEventManagerModule
 
 class PDFMonitorModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
     private val TAG = "PDFMonitorModule"
 
-    override fun getName() = "PDFMonitorService"
+    override fun getName() = "PDFMonitorModule"
 
     private fun checkPermissions(): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -50,37 +50,23 @@ class PDFMonitorModule(reactContext: ReactApplicationContext) : ReactContextBase
     }
 
     @ReactMethod
-    fun startService(promise: Promise) {
+    fun checkPermissionsStatus(promise: Promise) {
         try {
-            if (!checkPermissions()) {
-                promise.reject("ERROR", "Required permissions not granted")
-                return
-            }
-
-            val intent = Intent(reactApplicationContext, PDFMonitorService::class.java)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                reactApplicationContext.startForegroundService(intent)
-            } else {
-                reactApplicationContext.startService(intent)
-            }
-            Log.i(TAG, "PDF Monitor Service started successfully")
-            promise.resolve(null)
+            val hasPermissions = checkPermissions()
+            promise.resolve(hasPermissions)
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to start PDFMonitorService", e)
-            promise.reject("ERROR", "Failed to start PDFMonitorService: ${e.message}")
+            promise.reject("ERROR", "Failed to check permissions: ${e.message}")
         }
     }
 
     @ReactMethod
-    fun stopService(promise: Promise) {
+    fun notifyNewPDF(filePath: String) {
         try {
-            val intent = Intent(reactApplicationContext, PDFMonitorService::class.java)
-            reactApplicationContext.stopService(intent)
-            Log.i(TAG, "PDF Monitor Service stopped successfully")
-            promise.resolve(null)
+            reactApplicationContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("onNewPDF", filePath)
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to stop PDFMonitorService", e)
-            promise.reject("ERROR", "Failed to stop PDFMonitorService: ${e.message}")
+            Log.e(TAG, "Failed to emit new PDF event", e)
         }
     }
 }

@@ -8,9 +8,9 @@ import {
   PermissionsAndroid,
   Linking,
   Platform,
-  NativeModules,
 } from 'react-native';
 import RNFS from 'react-native-fs';
+import { monitorPDFFiles } from '../tasks/PDFMonitorTask';
 
 interface WelcomeComponentProps {
   organizationName: string;
@@ -25,18 +25,10 @@ interface FSEvent {
 const WelcomeComponent: React.FC<WelcomeComponentProps> = ({ organizationName, onLogout }) => {
   const [isMonitoring, setIsMonitoring] = useState(false);
   const DOWNLOAD_PATH = '/storage/emulated/0/Download';
-  const watcherRef = useRef<NodeJS.Timeout | null>(null);
-  const openSettings = async () => await Linking.openSettings();
+  const monitorIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const requestStoragePermission = async () => {
     try {
-      // Request battery optimization first
-      try {
-        await NativeModules.PowerManagerModule.requestIgnoreBatteryOptimizations('com.rnmonitorapp');
-      } catch (error) {
-        console.warn('Battery optimization request failed:', error);
-      }
-
       const androidVersion = typeof Platform.Version === 'string'
         ? parseInt(Platform.Version, 10)
         : Platform.Version;
@@ -158,58 +150,38 @@ const WelcomeComponent: React.FC<WelcomeComponentProps> = ({ organizationName, o
         return;
       }
 
-      try {
-        await NativeModules.PDFMonitorService.startService();
-        setIsMonitoring(true);
-      } catch (error) {
-        console.error('Error starting PDFMonitorService:', error);
-        Alert.alert('错误', '无法启动监控服务');
-      }
+      // Start periodic monitoring in foreground
+      monitorIntervalRef.current = setInterval(async () => {
+        try {
+          const hasNewPDFs = await monitorPDFFiles();
+          if (hasNewPDFs) {
+            Alert.alert(
+              '提示',
+              '检测到新的PDF文件',
+              [{ text: 'OK' }],
+              { cancelable: true }
+            );
+          }
+        } catch (error) {
+          console.error('Error in monitoring interval:', error);
+        }
+      }, 5000);
+
+      setIsMonitoring(true);
     } catch (error) {
       console.error('Error in startMonitoring:', error);
       Alert.alert('错误', '无法开始监听文件夹');
     }
   };
 
-  const checkFileWriteComplete = async (filePath: string) => {
-    try {
-      let lastSize = 0;
-      let currentSize = 0;
-      do {
-        lastSize = currentSize;
-        const stats = await RNFS.stat(filePath);
-        currentSize = stats.size;
-        await new Promise(resolve => setTimeout(resolve, 1000));
-      } while (lastSize !== currentSize);
-
-      const alertTimeout = setTimeout(() => {
-        Alert.alert(
-          '提示',
-          '检测到新的PDF文件',
-          [{ text: 'OK' }],
-          { cancelable: true }
-        );
-      }, 0);
-
-      setTimeout(() => {
-        clearTimeout(alertTimeout);
-      }, 10000);
-    } catch (error) {
-      console.error('Error checking file:', error);
-    }
-  };
-
   useEffect(() => {
     return () => {
-      if (isMonitoring) {
-        try {
-          NativeModules.PDFMonitorService.stopService();
-        } catch (error) {
-          console.error('Error stopping PDFMonitorService:', error);
-        }
+      if (monitorIntervalRef.current) {
+        clearInterval(monitorIntervalRef.current);
+        monitorIntervalRef.current = null;
       }
     };
-  }, [isMonitoring]);
+  }, []);
 
   return (
     <View style={styles.container}>
