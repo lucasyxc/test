@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">RNMonitorApp</string>
+    <string name="storage_permission_description">需要存储权限以监控下载文件夹中的PDF文件</string>
+    <string name="notification_permission_description">需要通知权限以显示文件监控状态</string>
+    <string name="permission_group_storage">存储权限</string>
+    <string name="permission_group_notifications">通知权限</string>
 </resources>

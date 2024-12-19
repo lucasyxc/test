@@ -1,11 +1,28 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET" android:required="true" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" android:required="true" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="32" android:required="true" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" android:required="true" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" android:required="true" />
+    <permission
+        android:name="com.rnmonitorapp.permission.STORAGE_ACCESS"
+        android:label="@string/permission_group_storage"
+        android:description="@string/storage_permission_description"
+        android:protectionLevel="dangerous" />
+
+    <permission
+        android:name="com.rnmonitorapp.permission.NOTIFICATION_ACCESS"
+        android:label="@string/permission_group_notifications"
+        android:description="@string/notification_permission_description"
+        android:protectionLevel="dangerous" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-permission android:name="com.rnmonitorapp.permission.STORAGE_ACCESS" />
+    <uses-permission android:name="com.rnmonitorapp.permission.NOTIFICATION_ACCESS" />
 
     <application
         android:name=".MainApplication"
@@ -34,5 +51,12 @@
         <receiver
             android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher"
             android:exported="false" />
+
+        <meta-data
+            android:name="com.rnmonitorapp.permission.STORAGE_PERMISSION"
+            android:value="android.permission-group.STORAGE" />
+        <meta-data
+            android:name="com.rnmonitorapp.permission.NOTIFICATIONS_PERMISSION"
+            android:value="android.permission-group.NOTIFICATIONS" />
     </application>
 </manifest>
